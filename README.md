@@ -1,27 +1,65 @@
-# Edgerunner
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.5.
+<img src="https://raw.githubusercontent.com/rjerez1992/edgerunner-kafka-ui/master/imgs/logo.png" width=10% height=10%>
 
-## Development server
+# Edgerunner - Kafka Consumer/Producer UI
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Edgerunner is a very basic UI for consuming and producing JSON data to Kafka clusters. Keep in mind
+this is not a cluster management tool and it was only made for its very specific purpose.
 
-## Code scaffolding
+## State    
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+⚠️ This is in "alpha" state. It has multiple bugs and things to fix. If you plan to use it for production, please wait for a final release.
+Since this is an "alpha" release, development tools are also enabled and some sensitive information might be logged on the console.
 
-## Build
+## Features
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- Manage connections for multiple clusters. 
+- Password storage using system's keychain.
+- Connect to local clusters without security and remote clusters using SSL/SASL.
+- Protect clusters from production with "Read-only" mode.
+- Manage a collection of template messages for production.
+- Rich editor for JSON messages. (Monaco)
+- Create new topics.
+- Subscribe to topics and consume messages.
+- Produce to topics from templates or raw message.
+- Data generation for template messages. (FakerJS)
 
-## Running unit tests
+## Upcoming
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- Import/export templates and collection.
+- Test connection on add/edit cluster data.
+- Template versioning and groups.
 
-## Running end-to-end tests
+## Limitations
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- Credentials with cluster Admin access are required to fetch topic's list.
 
-## Further help
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Screenshots
+
+![cluster-list-ss](https://raw.githubusercontent.com/rjerez1992/edgerunner-kafka-ui/master/imgs/ss1.png?raw=true)
+![explorer-ss](https://github.com/rjerez1992/edgerunner-kafka-ui/blob/master/imgs/ss2.png?raw=true)
+![message-editor-ss](https://github.com/rjerez1992/edgerunner-kafka-ui/blob/master/imgs/ss3.png?raw=true)
+![add-cluster-ss](https://github.com/rjerez1992/edgerunner-kafka-ui/blob/master/imgs/ss4.png?raw=true)
+
+## Tech Stack
+
+- Main: ElectronJS + Angular (Typescript)
+- Main Libraries: Monaco Editor, FakerJS, KafkaJS, SweetAlert2.
+
+## Requests
+
+Baside upcoming features, there isn't anything else planned. If you require
+something like a new connection protocol or another message type (XML for example), 
+please open an issue and I'll what I can do.
+
+## Contributing
+
+Contributions are always welcome. Don't hesistate to open a PR.
+(Specially code refactoring because ngl it's a mess 😄)
+
+
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
