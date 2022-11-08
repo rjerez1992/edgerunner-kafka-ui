@@ -1,0 +1,505 @@
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import {v4 as uuidv4} from 'uuid';
+import { KafkaMessage } from 'kafkajs';
+import { actionShowToast, headerExploreCluster } from 'src/app/definitions/constants';
+import { NavigationAction } from 'src/app/models/navigation-action';
+import { UserMessageTemplate } from 'src/app/models/user-templates';
+import { GeneralParamsService } from 'src/app/services/general-params.service';
+import { KafkaService } from 'src/app/services/kafka.service';
+import { UserTemplatesService } from 'src/app/services/user-templates.service';
+import { GeneralUtils } from 'src/app/utils/general-utils';
+import { SwalHelpers } from 'src/app/utils/swal-helpers';
+import * as monaco from "monaco-editor";
+import { NgxEditorModel } from 'ngx-monaco-editor-v2';
+import { DataGenerator } from 'src/app/utils/data-generator';
+
+@Component({
+  selector: 'app-explorer',
+  templateUrl: './explorer.component.html',
+  styleUrls: ['./explorer.component.scss']
+})
+export class ExplorerComponent implements OnInit {
+  //Kafka related
+  public topics : string[] = [];
+  public activeTopic: string = "";
+
+  public isConsumerPaused: boolean = false;
+
+  public isLoading : boolean = false;
+  public loadingText: string = "";
+
+  public receivedMessages: KafkaMessage[];
+
+  public isShowingMessageDetails: boolean = false;
+  public messageToShowDetails: KafkaMessage;
+
+  //Templates related
+  public templates: UserMessageTemplate[] = [];
+  public isTemplateEditorOn = false;
+  public isTemplateEditorSendRawMode = false;
+  @Input() currentEditTemplate: UserMessageTemplate;
+
+  private newMessageIconShownRecord: string[] = [];
+
+  //Monaco editor options - Template editor
+  public templateEditorOptions = {
+    value: "{}",
+    language: 'json',
+    roundedSelection: true,
+    scrollBeyondLastLine: false,
+    readOnly: false,
+    fontSize: "14px",
+    glyphMargin: false,
+    lineDecorationsWidth: 0,
+    lineNumbersMinChars: 2,
+    minimap: {
+      enabled: false,
+    },
+    theme: 'vs-dark'
+  };
+  @Input() templateEditorCode : string = "{}";
+
+  //Monaco editor options - Message viewer
+  public messageViewerOptions = {
+    value: "{}",
+    language: 'json',
+    roundedSelection: true,
+    scrollBeyondLastLine: false,
+    readOnly: true,
+    fontSize: "14px",
+    glyphMargin: false,
+    lineDecorationsWidth: 0,
+    lineNumbersMinChars: 2,
+    minimap: {
+      enabled: false,
+    },
+    theme: 'vs-dark'
+  };
+  @Input() messageViewerCode : string = "{}";
+    
+  constructor(
+    private kafkaService: KafkaService,
+    private userTemplatesService: UserTemplatesService,
+    private cdRef: ChangeDetectorRef,
+    private generalParamsService: GeneralParamsService,
+    private router: Router
+  ) { 
+    this.receivedMessages = [];
+    this.currentEditTemplate = {} as UserMessageTemplate;
+  }
+
+  ngOnInit(): void {
+    dayjs.extend(utc);
+    this.generalParamsService.setHeaderMode(headerExploreCluster);
+    this.generalParamsService.setClusterName(this.kafkaService.currentClusterInfo().name);
+    this.generalParamsService.setIsSecureMode(this.kafkaService.currentClusterInfo().secureMode);
+    this.generalParamsService.setIsReadOnly(this.kafkaService.currentClusterInfo().readOnly);
+  }
+
+  ngAfterViewInit() {
+    this.setLoading("Loading cluster data");
+
+    console.log("Checking cluster connection");
+    if (!this.kafkaService.isConnected()){
+      this.isLoading = false;
+      console.warn("Tried to open clusteer without a custer connected");
+      let action : NavigationAction = {
+        action: actionShowToast,
+        type: 'error',
+        value: 'Cluster connection problem'
+      } 
+      this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
+    }
+
+    this.loadUserTemplates();
+    this.loadTopicsList(); //NOTE: This is async, so user templates first.
+  }
+
+  loadTopicsList(){
+    this.setLoading("Loading topics list");
+    console.log("Fetching topic list");
+    //TODO: This will fail if admin is not available
+    this.kafkaService.topicsList().then((value)=>{
+      this.topics = value;
+      this.isLoading = false;
+      this.cdRef.detectChanges();
+    }).catch((e)=>{
+      console.log("Unable to retrieve topics");
+      console.log(e);
+    });
+  }
+
+  loadUserTemplates(): void {
+    this.setLoading("Loading user templates");
+    this.templates = this.userTemplatesService.getUserTemplates();
+    console.log(this.templates);
+    this.isLoading = false;
+    this.cdRef.detectChanges();
+  }
+
+  openCreateTemplate(): void { 
+    this.currentEditTemplate = {} as UserMessageTemplate;
+    this.templateEditorCode = "{}";
+    this.isTemplateEditorOn = true;
+    this.isTemplateEditorSendRawMode = false;
+  } 
+
+  openSendRaw(): void { 
+    this.currentEditTemplate = {} as UserMessageTemplate;
+    this.templateEditorCode = "{}";
+    this.isTemplateEditorOn = true;
+    this.isTemplateEditorSendRawMode = true;
+  }
+
+  showTemplateDetails(template: UserMessageTemplate): void {
+    this.currentEditTemplate = template;
+    this.templateEditorCode = this.currentEditTemplate.value;
+    this.isTemplateEditorOn = true;
+    this.isTemplateEditorSendRawMode = false;
+  }
+
+  saveTemplateChanges(): void {
+    if (!this.isEditorValidJSON){
+      SwalHelpers.triggerToast("error", "JSON is not valid");
+      return;
+    }
+
+    this.currentEditTemplate.value = this.templateEditorCode;
+    if (this.currentEditTemplate.name == "" || !this.currentEditTemplate.name){
+      this.currentEditTemplate.name = GeneralUtils.getFunnyNameFor("template");
+    }
+    if (this.currentEditTemplate.id == "" || !this.currentEditTemplate.id){
+      this.currentEditTemplate.id = uuidv4();
+      this.userTemplatesService.addUserTemplate(this.currentEditTemplate);
+      
+    } else {
+      this.userTemplatesService.updateUserTemplate(this.currentEditTemplate);
+    } 
+    this.isTemplateEditorOn = false;
+    this.loadUserTemplates();
+    SwalHelpers.triggerToast("success", "Template saved");    
+  }
+
+  async saveTemplateAndSend(): Promise<void> {
+    if (!this.isEditorValidJSON){
+      SwalHelpers.triggerToast("error", "JSON is not valid");
+      return;
+    }
+
+    if(this.kafkaService.currentClusterInfo().readOnly){
+      SwalHelpers.triggerToast("error", "Read-only connection mode");
+      return;
+    }
+
+    this.currentEditTemplate.value = this.templateEditorCode;
+    if (this.currentEditTemplate.name == "" || !this.currentEditTemplate.name){
+      this.currentEditTemplate.name = GeneralUtils.getFunnyNameFor("template");
+    }
+    if (this.currentEditTemplate.id == "" || !this.currentEditTemplate.id){
+      this.currentEditTemplate.id = uuidv4();
+      this.userTemplatesService.addUserTemplate(this.currentEditTemplate);
+      
+    } else {
+      this.userTemplatesService.updateUserTemplate(this.currentEditTemplate);
+    } 
+    this.isTemplateEditorOn = false;
+    this.loadUserTemplates();
+    if (this.isTopicActive()){
+      this.setLoading("Publishing message to topic "+this.activeTopic);
+      let processedValue = DataGenerator.processString(this.currentEditTemplate.value);
+      let result = await this.kafkaService.produceToTopic(this.activeTopic, this.currentEditTemplate.key, processedValue);
+      if (result){
+        SwalHelpers.triggerToast("success", "Template saved and sent");  
+      } else {
+        SwalHelpers.triggerToast("error", "Template saved but not sent");
+      }
+      this.isLoading = false;
+      this.cdRef.detectChanges();
+    }
+  }
+
+  async sendRawMessage(): Promise<void> {
+    if (!this.isEditorValidJSON){
+      SwalHelpers.triggerToast("error", "JSON is not valid");
+      return;
+    }
+
+    if(this.kafkaService.currentClusterInfo().readOnly){
+      SwalHelpers.triggerToast("error", "Read-only connection mode");
+      return;
+    }
+
+    this.currentEditTemplate.value = this.templateEditorCode;
+    this.isTemplateEditorOn = false;
+    if (this.isTopicActive()){
+      this.setLoading("Publishing message to topic "+this.activeTopic);
+      let processedValue = DataGenerator.processString(this.currentEditTemplate.value);
+      let result = await this.kafkaService.produceToTopic(this.activeTopic, this.currentEditTemplate.key, processedValue);
+      if (result){
+        SwalHelpers.triggerToast("success", "Template saved and sent");  
+      } else {
+        SwalHelpers.triggerToast("error", "Template saved but not sent");
+      }
+      this.isLoading = false;
+      this.cdRef.detectChanges();
+    } else {
+      SwalHelpers.triggerToast("error", "No active topic to publish");
+      console.error("Trying to publish message without active topic");
+    }
+  }
+
+  async sendSingleTemplate(template: UserMessageTemplate): Promise<void> {
+    if(this.kafkaService.currentClusterInfo().readOnly){
+      SwalHelpers.triggerToast("error", "Read-only connection mode");
+      return;
+    }
+    
+    if (this.isTopicActive()){
+      this.setLoading("Publishing message to topic "+this.activeTopic);
+      let processedValue = DataGenerator.processString(template.value);
+      let result = await this.kafkaService.produceToTopic(this.activeTopic, template.key, processedValue);
+      if (result){
+        SwalHelpers.triggerToast("success", "Message published");  
+      } else {
+        SwalHelpers.triggerToast("error", "Unable to publish message");
+      }
+      this.isLoading = false;
+      this.cdRef.detectChanges();
+    }
+  }
+
+  exportSingleTemplate(template: UserMessageTemplate){
+    console.log("I want to export a single template");
+    SwalHelpers.triggerToast("info", "Upcoming feature. Wait for it.");
+    //
+  }
+
+  importTemplate(): void {
+    console.log("I want to import a template or collection");
+    SwalHelpers.triggerToast("info", "Upcoming feature. Wait for it.");
+    //
+  }
+
+  exportCollection(): void {
+    console.log("I want to export the collection of templates");
+    SwalHelpers.triggerToast("info", "Upcoming feature. Wait for it.");
+    //
+  }
+
+  closeTemplateEditorOrRawSend(): void {
+    //TODO: Detect unsaved changes and request confirmation
+    this.isTemplateEditorOn = false;
+  }
+
+  deleteTemplate(template: UserMessageTemplate): void {
+    SwalHelpers.showConfirmationWarning("Delete template", "Are you sure you want to delete template: "+template.name+"?", "Delete", ()=>{
+      this.userTemplatesService.removeUserTemplate(template.id);
+      SwalHelpers.triggerToast("success", "Template deleted");
+      this.loadUserTemplates();
+    });
+  }
+
+  setActiveTopic(topic: string): void {
+    if (topic != this.activeTopic){
+      console.log("Subscribing to topic "+topic);
+      this.activeTopic = topic;
+      this.generalParamsService.setSubscribedTopic(this.activeTopic);
+      this.setLoading("Subscribing to "+this.activeTopic);
+
+      this.kafkaService.subscribeTo(this.activeTopic, (topic: string, message: KafkaMessage) =>{
+        if (message != undefined){
+          console.log("Message received from subscribed topic");
+          console.log(message);
+          this.receivedMessages.unshift(message);
+        }
+        this.cdRef.detectChanges();
+      }).then(() =>{
+        console.log("Topic consumption started");
+        SwalHelpers.triggerToast('info', "Subscribed to topic");
+        this.isLoading = false; //NOTE: Next calls detect changes
+        this.isConsumerPaused = false;
+        this.cleanupMessages();
+      }).catch((e) => {
+        console.log("Problem with consumption");
+        console.log(e);
+
+        this.kafkaService.cleanUpConnection();
+        let action : NavigationAction = {
+          action: actionShowToast,
+          type: 'error',
+          value: 'Consumption failure'
+        } 
+        this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
+      });
+    }
+  }
+
+  resumeConsumer(): void {
+    console.log("Resuming consumer");
+    this.kafkaService.resumeConsumer();
+    this.isConsumerPaused = false;
+    this.cdRef.detectChanges();
+    SwalHelpers.triggerToast("success", "Consumer resumed");
+  }
+
+  pauseConsumer(): void {
+    console.log("Pausing consumer");
+    this.kafkaService.pauseConsumer();
+    this.isConsumerPaused = true;
+    this.cdRef.detectChanges();
+    SwalHelpers.triggerToast("warning", "Consumer paused");
+  }
+
+  createTopic(): void {
+    console.log("User requested topic creation");
+    SwalHelpers.showTextInputSwal("Create topic", "Topic name", "Name is required", async (value: string) => {
+      if (!value){
+        return;
+      }
+
+      if (this.topics.includes(value)){
+        SwalHelpers.triggerToast("error", "Topic name already taken");
+      }
+
+      this.setLoading("Creating new topic: "+value);
+      this.cdRef.detectChanges();
+
+      let result = await this.kafkaService.createTopic(value);
+      if (result){
+        SwalHelpers.triggerToast("success", "Topic created");
+        this.loadTopicsList();
+      } else {
+        SwalHelpers.triggerToast("error", "Unable to create topic");
+      }
+    });
+  }
+
+  showMessageDetails(message: KafkaMessage): void{
+    this.isShowingMessageDetails = true;
+    this.messageToShowDetails = message;
+    this.messageViewerCode = this.getMessageStringValue(this.messageToShowDetails);
+    this.cdRef.detectChanges();
+  }
+
+  backToMessageList(): void {
+    this.isShowingMessageDetails = false;
+    this.cdRef.detectChanges();
+  }
+
+  copyMessageBodyToClipboard(): void {
+    if (this.isShowingMessageDetails){
+      navigator.clipboard.writeText(this.kafkaService.getMessageStringValue(this.messageToShowDetails)).then(() => {
+        SwalHelpers.triggerToast("info", "Copied to clipboard");
+      }, () => {
+        SwalHelpers.triggerToast("error", "Unable to copy to clipboard");
+      });
+    }
+  }
+
+  getMessageStringValue(message: KafkaMessage){
+    let msg = this.kafkaService.getMessageStringValue(message);
+    if (msg != "" && msg != undefined){
+      return msg;
+    }
+    return "(empty)";
+  }
+
+  getMessageStringKey(message: KafkaMessage){
+    let key = this.kafkaService.getMessageStringKey(message);
+    if (key != "" && key != undefined){
+      return key;
+    }
+    return "(empty)";
+  }
+
+  getDateFormatted(stringDate: string){
+    return dayjs(Number(stringDate)).utc().format();
+  }
+
+  setLoading(message: string){
+    this.loadingText = message;
+    this.isLoading = true;
+  }
+
+  cleanupMessagesUserAction(): void {
+    this.cleanupMessages();
+    SwalHelpers.triggerToast('info', "Message history cleaned");
+  }
+
+  cleanupMessages(): void {
+    console.log("Cleaning up message list");
+    this.receivedMessages = [];
+    this.newMessageIconShownRecord = [];
+    this.cdRef.detectChanges();
+  }
+
+  isTopicActive(): boolean {
+    return this.activeTopic != "";
+  }
+
+  shouldShowNewMessageIcon(timestamp: string){
+    if (!this.newMessageIconShownRecord.includes(timestamp)){
+      this.newMessageIconShownRecord.push(timestamp);
+      return true;
+    }
+    return false;
+  }
+
+  beautifyCode(): void {
+    if (this.isEditorValidJSON()){
+      let object = JSON.parse(this.templateEditorCode);
+      let beautified = JSON.stringify(object, null, 2);
+      this.templateEditorCode = beautified;
+      this.cdRef.detectChanges();
+      SwalHelpers.triggerToast("success", "JSON beautified");
+    } else {
+      SwalHelpers.triggerToast("error", "Must be a valid JSON");
+    }
+  }
+
+  compactCode(): void {
+    if (this.isEditorValidJSON()){
+      let object = JSON.parse(this.templateEditorCode);
+      let compacted = JSON.stringify(object);
+      this.templateEditorCode = compacted;
+      this.cdRef.detectChanges();
+      SwalHelpers.triggerToast("success", "JSON compacted");
+    } else {
+      SwalHelpers.triggerToast("error", "Must be a valid JSON");
+    }
+  }
+
+  generatorsTips(): void {
+    SwalHelpers.showHTMLTextSwal(`
+    Use tokens in your JSON to replace them with random values<br>
+    <br>
+    Datatypes:<br>
+    <b>$UUID$, $STRING$, $NUMBER$, $BIG_NUMBER$, $FLOAT$, $DATE$</b><br>
+    Names:<br>
+    <b>$FIRST_NAME$, $LAST_NAME$, $FULL_NAME$</b><br>
+    Finnancial:<br>
+    <b>$AMOUNT$, $CARD_NUMBER$, $ACCOUNT_NUMBER$</b><br>
+    Address:<br>
+    <b>$COUNTRY$, $CITY$, $STREET$</b><br>
+    Others:<br>
+    <b>$COMPANY_NAME$, $PHONE_NUMBER$, $SENCENTE$</b><br>
+  `);
+  }
+
+  isEditorValidJSON(): boolean {
+    try {
+      JSON.parse(this.templateEditorCode);
+    } catch (e) {
+      try {
+        JSON.parse(DataGenerator.processString(this.templateEditorCode));
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+    return true;
+  }
+}

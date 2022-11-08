@@ -1,0 +1,10 @@
+.xToggle[data-checked="false"] {
+  justify-content: flex-start;
+  background-color: #ccc;
+}
+
+.xToggle[data-checked="true"] {
+  justify-content: flex-end;
+  background-color: #2196F3;
+}
+

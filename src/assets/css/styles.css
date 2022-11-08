@@ -1,0 +1,131 @@
+.card {
+  background: #2f3136;
+  border: none;
+}
+
+header {
+  background: #202225;
+}
+
+footer {
+  background: #2f3136;
+}
+
+.card-lighter {
+  background: #33353b;
+}
+
+.card:hover {
+  background: #2b2d31;
+  border-color: white;
+}
+
+.card-lighter:hoover {
+  background: #2f3136;
+}
+
+input {
+  color: #b8ddd1;
+  background-color: #202225;
+  border: none;
+  border-radius: 4px;
+  padding: 3px 10px;
+}
+
+.card-form {
+  background: #2f3136 !important;
+}
+
+.card-darker {
+  background: #202225;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  user-select: none;
+}
+
+.pointer-cursor {
+  cursor: pointer !important;
+}
+
+.user-noselect {
+  user-select: none;
+}
+
+textarea {
+  resize: none;
+  border-radius: 5px;
+  padding: 5px;
+  border: none;
+}
+
+.overlay-loader {
+  position: fixed;
+  background-color: rgba(0,0,0,0.75);
+  top: 56px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-bottom: 84px;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.link-hoverable:hover {
+  color: indianred !important;
+}
+
+.mini-button:hover {
+  background-color: #55555b;
+  color: greenyellow !important;
+  border-radius: 2px;
+}
+
+.corner-icon {
+  animation: fadeOut 3s forwards;
+  animation-delay: 2s;
+  color: lightgreen;
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.delete-icon-corner {
+  position: absolute;
+  right: 15px;
+}
+
+.button-small-corner {
+  position: absolute;
+  right: 0px;
+  height: 24px;
+  bottom: 10px;
+  padding: 0px 6px;
+}
+
+.read-only-below {
+  position: absolute;
+  left: 21px;
+  top: 34px;
+}
+
+.button-small-corner-end {
+  height: 24px;
+  padding: 0px 6px;
+}
+
+/* For darkmode bars */
+:root {
+  color-scheme: dark;
+}

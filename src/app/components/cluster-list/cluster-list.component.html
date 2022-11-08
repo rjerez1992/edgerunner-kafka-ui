@@ -1,0 +1,45 @@
+<!-- Start: cluster-list -->
+<div class="row justify-content-center align-items-center h-100 overflow-hidden" style="overflow: hidden;">
+    <!-- Start: server-1 -->
+    <div *ngFor="let cluster of this.userClusters; index as i; first as isFirst" class="col-auto align-self-center" style="margin: 10px 0px;">
+        <div class="card" style="width: 280px;height: 100px;">
+            <div (click)="this.exploreCluster(cluster.id)" class="card-body text-center d-flex pointer-cursor"><svg (click)="this.editCluster(cluster.id); $event.stopPropagation()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-end text-white-50 pointer-cursor mini-button" data-bs-toggle="tooltip" data-bss-tooltip="" style="position: absolute;right: 24px;top: 6px;font-size: 15px;" title="Edit cluster information">
+                    <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                    <path d="M490.3 40.4C512.2 62.27 512.2 97.73 490.3 119.6L460.3 149.7L362.3 51.72L392.4 21.66C414.3-.2135 449.7-.2135 471.6 21.66L490.3 40.4zM172.4 241.7L339.7 74.34L437.7 172.3L270.3 339.6C264.2 345.8 256.7 350.4 248.4 353.2L159.6 382.8C150.1 385.6 141.5 383.4 135 376.1C128.6 370.5 126.4 361 129.2 352.4L158.8 263.6C161.6 255.3 166.2 247.8 172.4 241.7V241.7zM192 63.1C209.7 63.1 224 78.33 224 95.1C224 113.7 209.7 127.1 192 127.1H96C78.33 127.1 64 142.3 64 159.1V416C64 433.7 78.33 448 96 448H352C369.7 448 384 433.7 384 416V319.1C384 302.3 398.3 287.1 416 287.1C433.7 287.1 448 302.3 448 319.1V416C448 469 405 512 352 512H96C42.98 512 0 469 0 416V159.1C0 106.1 42.98 63.1 96 63.1H192z"></path>
+                </svg><svg (click)="this.deleteCluster(cluster.id); $event.stopPropagation()" xmlns="http://www.w3.org/2000/svg" viewBox="-96 0 512 512" width="1em" height="1em" fill="currentColor" class="text-end text-danger pointer-cursor mini-button" data-bs-toggle="tooltip" data-bss-tooltip="" style="position: absolute;right: 6px;top: 6px;" title="Remove cluster">
+                    <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                    <path d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"></path>
+                </svg>
+                <div class="row text-center flex-fill" style="padding-left: 10px;padding-right: 10px;">
+                    <div class="col-9 align-self-center">
+                        <h5 class="text-truncate text-start">{{cluster.name}}</h5>
+                        <h6 class="text-truncate text-start text-secondary">{{cluster.host}}</h6>
+                    </div>
+                    <div class="col-auto text-center m-auto"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -32 576 576" width="1em" height="1em" fill="currentColor" class="text-info" style="font-size: 28px;">
+                            <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                            <path d="M96 0C113.7 0 128 14.33 128 32V128H64V32C64 14.33 78.33 0 96 0zM288 0C305.7 0 320 14.33 320 32V128H256V32C256 14.33 270.3 0 288 0zM352 160C369.7 160 384 174.3 384 192C384 194.3 383.7 196.6 383.3 198.8C309.8 219.1 256 287.7 256 368C256 379.4 257.1 390.5 259.1 401.3C248.1 406.4 236.3 410.3 224 412.8V512H160V412.8C86.97 397.1 32 333.4 32 256V224C14.33 224 0 209.7 0 192C0 174.3 14.33 160 32 160H352zM288 368C288 288.5 352.5 224 432 224C511.5 224 576 288.5 576 368C576 447.5 511.5 512 432 512C352.5 512 288 447.5 288 368zM464.8 286.4L368.8 358.4C364.7 361.5 362.1 366.9 364.6 371.8C366.2 376.7 370.8 380 376 380H411.6L381.5 434.2C378.8 439.1 379.8 445.3 384.1 449C388.4 452.8 394.7 452.1 399.2 449.6L495.2 377.6C499.3 374.5 501 369.1 499.4 364.2C497.8 359.3 493.2 356 488 356H452.4L482.5 301.8C485.2 296.9 484.2 290.7 479.9 286.1C475.6 283.2 469.3 283 464.8 286.4V286.4z"></path>
+                        </svg></div>
+                </div>
+            </div>
+        </div>
+    </div><!-- End: server-1 -->
+    <!-- Start: new-server -->
+    <div class="col-auto align-self-center" style="margin: 10px 0px;">
+        <div class="card card-lighter" style="width: 280px;height: 100px;">
+            <div class="card-body text-center d-flex pointer-cursor" [routerLink]="'add'">
+                <div class="row text-center flex-fill" style="padding-left: 10px;padding-right: 10px;">
+                    <div class="col-9 align-self-center">
+                        <h5 class="text-truncate text-start">Add new</h5>
+                        <h6 class="text-truncate text-start text-secondary">Click here</h6>
+                    </div>
+                    <div class="col-auto text-center m-auto"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 512 512" width="1em" height="1em" fill="currentColor" class="text-success" style="font-size: 28px;">
+                            <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                            <path d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z"></path>
+                        </svg></div>
+                </div>
+            </div>
+        </div>
+    </div><!-- End: new-server -->
+</div><!-- End: cluster-list -->
+<!-- Loading overlay -->
+<app-loading-overlay *ngIf="this.isLoading" [text]="this.loadingText"></app-loading-overlay>

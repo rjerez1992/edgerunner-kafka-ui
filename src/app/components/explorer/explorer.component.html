@@ -1,0 +1,368 @@
+<div class="row gx-1 justify-content-center align-items-center h-100 overflow-hidden" style="padding-left: 10px;padding-right: 10px;padding-top: 10px;padding-bottom: 10px;">
+    <!-- Start: topics-bar -->
+    <div class="col-2 align-self-center h-100">
+        <div class="card card-form h-100 flex-grow-0" style="width: 100%;">
+            <div class="card-body text-center d-flex flex-column flex-grow-0 h-100">
+                <h5 class="text-truncate text-start"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-info" style="margin-top: -4px;">
+                        <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                        <path d="M511.1 63.1v287.1c0 35.25-28.75 63.1-64 63.1h-144l-124.9 93.68c-7.875 5.75-19.12 .0497-19.12-9.7v-83.98h-96c-35.25 0-64-28.75-64-63.1V63.1c0-35.25 28.75-63.1 64-63.1h384C483.2 0 511.1 28.75 511.1 63.1z"></path>
+                    </svg>&nbsp;Topics</h5>
+                <hr style="margin-right: 12px;margin-left: 12px;margin-top: 1px;"><!-- Start: topics -->
+                <div class="flex-fill" style="overflow: auto;padding-right: 3px;padding-left: 3px;margin-bottom: 10px;">
+                    <!-- Start: topic-button -->
+                    <div *ngFor="let topic of this.topics; index as i; first as isFirst">
+                        <div *ngIf="topic != this.activeTopic" (click)="this.setActiveTopic(topic)" class="card card-darker" style="margin-bottom: 3px;">
+                            <div class="card-body pointer-cursor" style="padding: 7px;">
+                                <h6 class="text-truncate text-start text-white-50 card-title" style="margin-bottom: 0px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 512 512" width="1em" height="1em" fill="currentColor" class="text-muted" style="margin-bottom: 4px;">
+                                        <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                        <path d="M416 127.1h-58.23l9.789-58.74c2.906-17.44-8.875-33.92-26.3-36.83c-17.53-2.875-33.92 8.891-36.83 26.3L292.9 127.1H197.8l9.789-58.74c2.906-17.44-8.875-33.92-26.3-36.83c-17.53-2.875-33.92 8.891-36.83 26.3L132.9 127.1H64c-17.67 0-32 14.33-32 32C32 177.7 46.33 191.1 64 191.1h58.23l-21.33 128H32c-17.67 0-32 14.33-32 32c0 17.67 14.33 31.1 32 31.1h58.23l-9.789 58.74c-2.906 17.44 8.875 33.92 26.3 36.83C108.5 479.9 110.3 480 112 480c15.36 0 28.92-11.09 31.53-26.73l11.54-69.27h95.12l-9.789 58.74c-2.906 17.44 8.875 33.92 26.3 36.83C268.5 479.9 270.3 480 272 480c15.36 0 28.92-11.09 31.53-26.73l11.54-69.27H384c17.67 0 32-14.33 32-31.1c0-17.67-14.33-32-32-32h-58.23l21.33-128H416c17.67 0 32-14.32 32-31.1C448 142.3 433.7 127.1 416 127.1zM260.9 319.1H165.8L187.1 191.1h95.12L260.9 319.1z"></path>
+                                    </svg>&nbsp;{{topic}}</h6>
+                            </div>
+                        </div><!-- End: topic-button -->
+                        <!-- Start: topic-button-sel -->
+                        <div *ngIf="topic == this.activeTopic" class="card card-darker" style="margin-bottom: 3px;">
+                            <div class="card-body pointer-cursor" style="padding: 7px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-primary float-end" style="font-size: 10px;margin-top: 4px;margin-right: 5px;">
+                                    <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                    <path d="M0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256zM256 352C309 352 352 309 352 256C352 202.1 309 160 256 160C202.1 160 160 202.1 160 256C160 309 202.1 352 256 352z"></path>
+                                </svg>
+                                <h6 class="text-truncate text-start card-title" style="margin-bottom: 0px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 512 512" width="1em" height="1em" fill="currentColor" class="text-primary" style="margin-bottom: 4px;">
+                                        <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                        <path d="M416 127.1h-58.23l9.789-58.74c2.906-17.44-8.875-33.92-26.3-36.83c-17.53-2.875-33.92 8.891-36.83 26.3L292.9 127.1H197.8l9.789-58.74c2.906-17.44-8.875-33.92-26.3-36.83c-17.53-2.875-33.92 8.891-36.83 26.3L132.9 127.1H64c-17.67 0-32 14.33-32 32C32 177.7 46.33 191.1 64 191.1h58.23l-21.33 128H32c-17.67 0-32 14.33-32 32c0 17.67 14.33 31.1 32 31.1h58.23l-9.789 58.74c-2.906 17.44 8.875 33.92 26.3 36.83C108.5 479.9 110.3 480 112 480c15.36 0 28.92-11.09 31.53-26.73l11.54-69.27h95.12l-9.789 58.74c-2.906 17.44 8.875 33.92 26.3 36.83C268.5 479.9 270.3 480 272 480c15.36 0 28.92-11.09 31.53-26.73l11.54-69.27H384c17.67 0 32-14.33 32-31.1c0-17.67-14.33-32-32-32h-58.23l21.33-128H416c17.67 0 32-14.32 32-31.1C448 142.3 433.7 127.1 416 127.1zM260.9 319.1H165.8L187.1 191.1h95.12L260.9 319.1z"></path>
+                                    </svg>&nbsp;{{topic}}</h6>
+                            </div>
+                        </div><!-- End: topic-button-sel -->
+                    </div>
+                </div><!-- End: topics --><button (click)="this.createTopic()" class="btn btn-dark btn-sm" type="button" style="width: 100%;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-success" style="margin-top: -3px;">
+                        <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                        <path d="M0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256zM256 368C269.3 368 280 357.3 280 344V280H344C357.3 280 368 269.3 368 256C368 242.7 357.3 232 344 232H280V168C280 154.7 269.3 144 256 144C242.7 144 232 154.7 232 168V232H168C154.7 232 144 242.7 144 256C144 269.3 154.7 280 168 280H232V344C232 357.3 242.7 368 256 368z"></path>
+                    </svg>&nbsp;Create</button>
+            </div>
+        </div>
+    </div><!-- End: topics-bar -->
+
+    <!-- Start: template-publish-bar -->
+    <div *ngIf="!this.isTemplateEditorOn" class="col-5 align-self-center h-100">
+        <div class="card card-form h-100 flex-grow-0" style="width: 100%;">
+            <div class="card-body text-center d-flex flex-column flex-grow-0 h-100">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="text-truncate text-start"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-primary" style="margin-top: -4px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM382.6 254.6c-12.5 12.5-32.75 12.5-45.25 0L288 205.3V384c0 17.69-14.33 32-32 32s-32-14.31-32-32V205.3L174.6 254.6c-12.5 12.5-32.75 12.5-45.25 0s-12.5-32.75 0-45.25l103.1-103.1C241.3 97.4 251.1 96 256 96c4.881 0 14.65 1.391 22.65 9.398l103.1 103.1C395.1 221.9 395.1 242.1 382.6 254.6z"></path>
+                            </svg>&nbsp;Production</h5>
+                    </div>
+                    <div class="col">
+                        <!-- Start: edit-message-h --><span class="text-secondary float-end user-noselect" style="padding-bottom: 0;margin-top: 0;margin-right: 7px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -32 576 576" width="1em" height="1em" fill="currentColor" style="margin-top: -4px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M572.6 270.3l-96 192C471.2 473.2 460.1 480 447.1 480H64c-35.35 0-64-28.66-64-64V96c0-35.34 28.65-64 64-64h117.5c16.97 0 33.25 6.742 45.26 18.75L275.9 96H416c35.35 0 64 28.66 64 64v32h-48V160c0-8.824-7.178-16-16-16H256L192.8 84.69C189.8 81.66 185.8 80 181.5 80H64C55.18 80 48 87.18 48 96v288l71.16-142.3C124.6 230.8 135.7 224 147.8 224h396.2C567.7 224 583.2 249 572.6 270.3z"></path>
+                            </svg>&nbsp;Templates collection</span><!-- End: edit-message-h -->
+                    </div>
+                </div>
+                <hr style="margin-right: 12px;margin-left: 12px;margin-top: 1px;">
+                
+                <!-- Start: collection -->
+                <div class="flex-fill" style="overflow: auto;padding-right: 3px;padding-left: 3px;margin-bottom: 10px;">
+                    
+                    <!-- Start: collection-template -->
+                    <div *ngFor="let template of this.templates; index as i; first as isFirst" class="card card-darker w-100" style="margin-bottom: 3px;">
+                        <div (click)="this.showTemplateDetails(template)" class="card-body pointer-cursor w-100">
+
+                            <!-- Start: send-button -->
+                            <button *ngIf="this.activeTopic != ''" (click)="this.sendSingleTemplate(template); $event.stopPropagation()" class="btn btn-dark btn-sm button-small-corner" type="button" style="margin-right: 10px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -32 576 576" width="1em" height="1em" fill="currentColor" class="text-primary" style="margin-top: -3px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M0 64C0 28.65 28.65 0 64 0H224V128C224 145.7 238.3 160 256 160H384V299.6L289.3 394.3C281.1 402.5 275.3 412.8 272.5 424.1L257.4 484.2C255.1 493.6 255.7 503.2 258.8 512H64C28.65 512 0 483.3 0 448V64zM256 128V0L384 128H256zM564.1 250.1C579.8 265.7 579.8 291 564.1 306.7L534.7 336.1L463.8 265.1L493.2 235.7C508.8 220.1 534.1 220.1 549.8 235.7L564.1 250.1zM311.9 416.1L441.1 287.8L512.1 358.7L382.9 487.9C378.8 492 373.6 494.9 368 496.3L307.9 511.4C302.4 512.7 296.7 511.1 292.7 507.2C288.7 503.2 287.1 497.4 288.5 491.1L303.5 431.8C304.9 426.2 307.8 421.1 311.9 416.1V416.1z"></path>
+                            </svg>&nbsp;Send</button>
+                            <!-- End: send-button -->
+
+                            <!-- Start: trash-icon -->
+                            <svg (click)="this.deleteTemplate(template); $event.stopPropagation()" xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 512 512" width="1em" height="1em" fill="currentColor" class="text-danger delete-icon-corner" data-bs-toggle="tooltip" data-bss-tooltip="" title="Delete message">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M135.2 17.69C140.6 6.848 151.7 0 163.8 0H284.2C296.3 0 307.4 6.848 312.8 17.69L320 32H416C433.7 32 448 46.33 448 64C448 81.67 433.7 96 416 96H32C14.33 96 0 81.67 0 64C0 46.33 14.33 32 32 32H128L135.2 17.69zM394.8 466.1C393.2 492.3 372.3 512 346.9 512H101.1C75.75 512 54.77 492.3 53.19 466.1L31.1 128H416L394.8 466.1z"></path>
+                            </svg>
+                            <!-- End: trash-icon -->
+
+                            <!-- Start: export-single-btn -->
+                            <svg (click)="this.exportSingleTemplate(template); $event.stopPropagation()" xmlns="http://www.w3.org/2000/svg" viewBox="0 -32 576 576" width="1em" height="1em" fill="currentColor" class="text-white-50 delete-icon-corner" data-bs-toggle="tooltip" data-bss-tooltip="" title="Export message" style="right: 40px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path>
+                            </svg>
+                            <!-- End: export-single-btn -->
+
+                            <div class="row">
+                                <div class="col">
+                                    <h6 class="text-truncate text-start text-info" style="margin-bottom: 0px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-64 0 512 512" width="1em" height="1em" fill="currentColor" style="margin-top: -4px;">
+                                            <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                            <path d="M162.1 257.8c-7.812-7.812-20.47-7.812-28.28 0l-48 48c-7.812 7.812-7.812 20.5 0 28.31l48 48C137.8 386.1 142.9 388 148 388s10.23-1.938 14.14-5.844c7.812-7.812 7.812-20.5 0-28.31L128.3 320l33.86-33.84C169.1 278.3 169.1 265.7 162.1 257.8zM365.3 93.38l-74.63-74.64C278.6 6.742 262.3 0 245.4 0H64C28.65 0 0 28.65 0 64l.0065 384c0 35.34 28.65 64 64 64H320c35.2 0 64-28.8 64-64V138.6C384 121.7 377.3 105.4 365.3 93.38zM336 448c0 8.836-7.164 16-16 16H64.02c-8.838 0-16-7.164-16-16L48 64.13c0-8.836 7.164-16 16-16h160L224 128c0 17.67 14.33 32 32 32h79.1V448zM221.9 257.8c-7.812 7.812-7.812 20.5 0 28.31L255.7 320l-33.86 33.84c-7.812 7.812-7.812 20.5 0 28.31C225.8 386.1 230.9 388 236 388s10.23-1.938 14.14-5.844l48-48c7.812-7.812 7.812-20.5 0-28.31l-48-48C242.3 250 229.7 250 221.9 257.8z"></path>
+                                        </svg>&nbsp;{{template.name}}</h6>
+                                </div>
+                            </div>
+                            <div class="row w-100" style="margin-top: 5px;padding-right: 60px;">
+                                <div class="col w-100"><span class="text-start float-start w-100 text-truncate" style="font-size: 14px;overflow: hidden;text-overflow: ellipsis;"><span style="color: rgba(255, 255, 255, 0.5);">{{template.value}}</span><br></span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: collection-template -->
+
+                </div><!-- End: collection -->
+
+                <!-- Start: collection-options -->
+                <div class="row">
+                    <!-- Start: disabled-buttons -->
+                    <div *ngIf="this.activeTopic == ''" class="col text-start">
+                        <!-- Start: new --><button (click)="this.openCreateTemplate()" class="btn btn-success btn-sm float-end" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-64 0 512 512" width="1em" height="1em" fill="currentColor" style="margin-top: -3px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M256 0v128h128L256 0zM224 128L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48V160h-127.1C238.3 160 224 145.7 224 128zM288 301.7v36.57C288 345.9 281.9 352 274.3 352L224 351.1v50.29C224 409.9 217.9 416 210.3 416H173.7C166.1 416 160 409.9 160 402.3V351.1L109.7 352C102.1 352 96 345.9 96 338.3V301.7C96 294.1 102.1 288 109.7 288H160V237.7C160 230.1 166.1 224 173.7 224h36.57C217.9 224 224 230.1 224 237.7V288h50.29C281.9 288 288 294.1 288 301.7z"></path>
+                            </svg>&nbsp;New template</button><!-- End: new -->
+                        <!-- Start: select-topic-button --><button class="btn btn-dark btn-sm disabled float-end" type="button" style="margin-right: 10px;" disabled=""><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-primary" style="margin-top: -4px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"></path>
+                            </svg>&nbsp;Select topic to publish</button><!-- End: select-topic-button -->
+
+                        <!-- Start: import-button -->
+                        <button (click)="this.importTemplate()" class="btn btn-dark btn-sm" type="button" style="margin-right: 10px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-primary" style="margin-top: -4px;">
+                            <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                            <path d="M384 0v128h128L384 0zM352 128L352 0H176C149.5 0 128 21.49 128 48V288h174.1l-39.03-39.03c-9.375-9.375-9.375-24.56 0-33.94s24.56-9.375 33.94 0l80 80c9.375 9.375 9.375 24.56 0 33.94l-80 80c-9.375 9.375-24.56 9.375-33.94 0C258.3 404.3 256 398.2 256 392s2.344-12.28 7.031-16.97L302.1 336H128v128C128 490.5 149.5 512 176 512h288c26.51 0 48-21.49 48-48V160h-127.1C366.3 160 352 145.7 352 128zM24 288C10.75 288 0 298.7 0 312c0 13.25 10.75 24 24 24H128V288H24z"></path>
+                        </svg>&nbsp;Import</button>
+                        <!-- End: import-button -->
+                        <!-- Start: export-button -->
+                        <button (click)="this.exportCollection()" class="btn btn-dark btn-sm" type="button" style="margin-right: 10px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -32 576 576" width="1em" height="1em" fill="currentColor" class="text-primary" style="margin-top: -4px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path>
+                            </svg>&nbsp;Export</button>
+                        <!-- End: export-button -->
+
+                    </div><!-- End: disabled-buttons -->
+                    <div *ngIf="this.activeTopic != ''" class="col text-start">
+                        <!-- Start: new --><button (click)="this.openCreateTemplate()" class="btn btn-success btn-sm float-end" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-64 0 512 512" width="1em" height="1em" fill="currentColor" style="margin-top: -3px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M256 0v128h128L256 0zM224 128L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48V160h-127.1C238.3 160 224 145.7 224 128zM288 301.7v36.57C288 345.9 281.9 352 274.3 352L224 351.1v50.29C224 409.9 217.9 416 210.3 416H173.7C166.1 416 160 409.9 160 402.3V351.1L109.7 352C102.1 352 96 345.9 96 338.3V301.7C96 294.1 102.1 288 109.7 288H160V237.7C160 230.1 166.1 224 173.7 224h36.57C217.9 224 224 230.1 224 237.7V288h50.29C281.9 288 288 294.1 288 301.7z"></path>
+                            </svg>&nbsp;New template</button><!-- End: new -->
+                        <!-- Start: send raw --><button (click)="this.openSendRaw()" class="btn btn-dark btn-sm float-end" type="button" style="margin-right: 10px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -32 576 576" width="1em" height="1em" fill="currentColor" class="text-primary" style="margin-top: -3px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M0 64C0 28.65 28.65 0 64 0H224V128C224 145.7 238.3 160 256 160H384V299.6L289.3 394.3C281.1 402.5 275.3 412.8 272.5 424.1L257.4 484.2C255.1 493.6 255.7 503.2 258.8 512H64C28.65 512 0 483.3 0 448V64zM256 128V0L384 128H256zM564.1 250.1C579.8 265.7 579.8 291 564.1 306.7L534.7 336.1L463.8 265.1L493.2 235.7C508.8 220.1 534.1 220.1 549.8 235.7L564.1 250.1zM311.9 416.1L441.1 287.8L512.1 358.7L382.9 487.9C378.8 492 373.6 494.9 368 496.3L307.9 511.4C302.4 512.7 296.7 511.1 292.7 507.2C288.7 503.2 287.1 497.4 288.5 491.1L303.5 431.8C304.9 426.2 307.8 421.1 311.9 416.1V416.1z"></path>
+                            </svg>&nbsp;Send RAW</button><!-- End: send raw -->
+
+                        <!-- Start: import-button -->
+                        <button (click)="this.importTemplate()" class="btn btn-dark btn-sm" type="button" style="margin-right: 10px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-primary" style="margin-top: -4px;">
+                            <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                            <path d="M384 0v128h128L384 0zM352 128L352 0H176C149.5 0 128 21.49 128 48V288h174.1l-39.03-39.03c-9.375-9.375-9.375-24.56 0-33.94s24.56-9.375 33.94 0l80 80c9.375 9.375 9.375 24.56 0 33.94l-80 80c-9.375 9.375-24.56 9.375-33.94 0C258.3 404.3 256 398.2 256 392s2.344-12.28 7.031-16.97L302.1 336H128v128C128 490.5 149.5 512 176 512h288c26.51 0 48-21.49 48-48V160h-127.1C366.3 160 352 145.7 352 128zM24 288C10.75 288 0 298.7 0 312c0 13.25 10.75 24 24 24H128V288H24z"></path>
+                        </svg>&nbsp;Import</button>
+                        <!-- End: import-button -->
+                        <!-- Start: export-button -->
+                        <button (click)="this.exportCollection()" class="btn btn-dark btn-sm" type="button" style="margin-right: 10px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -32 576 576" width="1em" height="1em" fill="currentColor" class="text-primary" style="margin-top: -4px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M192 312C192 298.8 202.8 288 216 288H384V160H256c-17.67 0-32-14.33-32-32L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48v-128H216C202.8 336 192 325.3 192 312zM256 0v128h128L256 0zM568.1 295l-80-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L494.1 288H384v48h110.1l-39.03 39.03C450.3 379.7 448 385.8 448 392s2.344 12.28 7.031 16.97c9.375 9.375 24.56 9.375 33.94 0l80-80C578.3 319.6 578.3 304.4 568.1 295z"></path>
+                            </svg>&nbsp;Export</button>
+                        <!-- End: export-button -->
+
+                    </div>
+                </div><!-- End: collection-options -->
+            </div>
+        </div>
+    </div>
+    <!-- End: template-publish-bar -->
+
+    <!-- Start: template-edit-bar -->
+    <div *ngIf="this.isTemplateEditorOn" class="col-5 align-self-center h-100">
+        <div class="card card-form h-100 flex-grow-0" style="width: 100%;">
+            <div class="card-body text-center d-flex flex-column flex-grow-0 h-100">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="text-truncate text-start"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-primary" style="margin-top: -4px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM382.6 254.6c-12.5 12.5-32.75 12.5-45.25 0L288 205.3V384c0 17.69-14.33 32-32 32s-32-14.31-32-32V205.3L174.6 254.6c-12.5 12.5-32.75 12.5-45.25 0s-12.5-32.75 0-45.25l103.1-103.1C241.3 97.4 251.1 96 256 96c4.881 0 14.65 1.391 22.65 9.398l103.1 103.1C395.1 221.9 395.1 242.1 382.6 254.6z"></path>
+                            </svg>&nbsp;Production</h5>
+                    </div>
+                    <div class="col">
+                        <!-- Start: edit-message-h -->
+                        <span *ngIf="!this.isTemplateEditorSendRawMode" class="text-secondary float-end user-noselect" style="padding-bottom: 0;margin-top: 0;margin-right: 7px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" style="margin-top: -4px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M421.7 220.3L188.5 453.4L154.6 419.5L158.1 416H112C103.2 416 96 408.8 96 400V353.9L92.51 357.4C87.78 362.2 84.31 368 82.42 374.4L59.44 452.6L137.6 429.6C143.1 427.7 149.8 424.2 154.6 419.5L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3zM492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75z"></path>
+                            </svg>&nbsp;Editing template</span>
+                        <!-- End: edit-message-h -->
+                        <!-- Start: edit-message-h -->
+                        <span *ngIf="this.isTemplateEditorSendRawMode" class="text-secondary float-end user-noselect" style="padding-bottom: 0;margin-top: 0;margin-right: 7px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" style="margin-top: -4px;">
+                            <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                            <path d="M421.7 220.3L188.5 453.4L154.6 419.5L158.1 416H112C103.2 416 96 408.8 96 400V353.9L92.51 357.4C87.78 362.2 84.31 368 82.42 374.4L59.44 452.6L137.6 429.6C143.1 427.7 149.8 424.2 154.6 419.5L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3zM492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75z"></path>
+                        </svg>&nbsp;Send RAW message</span>
+                    <!-- End: edit-message-h -->
+                    </div>
+                </div>
+                <hr style="margin-right: 12px;margin-left: 12px;margin-top: 1px;"><!-- Start: edit-message-b -->
+                <div class="flex-fill d-flex flex-column" style="overflow: auto;padding-right: 3px;padding-left: 3px;margin-bottom: 10px;">
+                    <!-- Start: tmplate-name-field  -->
+                    <h6 *ngIf="!this.isTemplateEditorSendRawMode" class="text-truncate text-start text-white-50" style="padding-bottom: 3px;">Template name</h6>
+                    <input *ngIf="!this.isTemplateEditorSendRawMode" type="text" placeholder="My template" autofocus="" style="width: 100%;margin-bottom: 15px;" [(ngModel)]="this.currentEditTemplate.name">
+                    <!-- End: template-name-field -->
+                    <h6 class="text-truncate text-start text-info" style="margin-top: 7px;padding-bottom: 3px;">Message key</h6><input type="text" placeholder="(auto-generate)" style="width: 100%;" [(ngModel)]="this.currentEditTemplate.key">
+                    <h6 class="text-truncate text-start text-info" style="margin-top: 7px;">Message body
+                    
+                    <button (click)="this.generatorsTips()" class="btn btn-dark btn-sm button-small-corner-end float-end" type="button" style="margin-left: 5px;"><svg class="text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" style="margin-top: -3px;">
+                        <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                        <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"></path>
+                    </svg>&nbsp;Generators</button>
+                    <button (click)="this.compactCode()" class="btn btn-dark btn-sm button-small-corner-end float-end" type="button" style="margin-left: 5px;"><svg class="text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" style="margin-top: -3px;">
+                        <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                        <path d="M215.1 272h-136c-12.94 0-24.63 7.797-29.56 19.75C45.47 303.7 48.22 317.5 57.37 326.6l30.06 30.06l-78.06 78.07c-12.5 12.5-12.5 32.75-.0012 45.25l22.62 22.62c12.5 12.5 32.76 12.5 45.26 .0013l78.06-78.07l30.06 30.06c6.125 6.125 14.31 9.367 22.63 9.367c4.125 0 8.279-.7891 12.25-2.43c11.97-4.953 19.75-16.62 19.75-29.56V296C239.1 282.7 229.3 272 215.1 272zM296 240h136c12.94 0 24.63-7.797 29.56-19.75c4.969-11.97 2.219-25.72-6.938-34.87l-30.06-30.06l78.06-78.07c12.5-12.5 12.5-32.76 .0002-45.26l-22.62-22.62c-12.5-12.5-32.76-12.5-45.26-.0003l-78.06 78.07l-30.06-30.06c-9.156-9.141-22.87-11.84-34.87-6.937c-11.97 4.953-19.75 16.62-19.75 29.56v135.1C272 229.3 282.7 240 296 240z"></path>
+                    </svg>&nbsp;Minify</button>
+                    <button (click)="this.beautifyCode()" class="btn btn-dark btn-sm button-small-corner-end float-end" type="button"><svg class="text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 -32 576 576" width="1em" height="1em" fill="currentColor" style="margin-top: -3px;">
+                        <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                        <path d="M248.8 4.994C249.9 1.99 252.8 .0001 256 .0001C259.2 .0001 262.1 1.99 263.2 4.994L277.3 42.67L315 56.79C318 57.92 320 60.79 320 64C320 67.21 318 70.08 315 71.21L277.3 85.33L263.2 123C262.1 126 259.2 128 256 128C252.8 128 249.9 126 248.8 123L234.7 85.33L196.1 71.21C193.1 70.08 192 67.21 192 64C192 60.79 193.1 57.92 196.1 56.79L234.7 42.67L248.8 4.994zM427.4 14.06C446.2-4.686 476.6-4.686 495.3 14.06L529.9 48.64C548.6 67.38 548.6 97.78 529.9 116.5L148.5 497.9C129.8 516.6 99.38 516.6 80.64 497.9L46.06 463.3C27.31 444.6 27.31 414.2 46.06 395.4L427.4 14.06zM461.4 59.31L356.3 164.3L379.6 187.6L484.6 82.58L461.4 59.31zM7.491 117.2L64 96L85.19 39.49C86.88 34.98 91.19 32 96 32C100.8 32 105.1 34.98 106.8 39.49L128 96L184.5 117.2C189 118.9 192 123.2 192 128C192 132.8 189 137.1 184.5 138.8L128 160L106.8 216.5C105.1 221 100.8 224 96 224C91.19 224 86.88 221 85.19 216.5L64 160L7.491 138.8C2.985 137.1 0 132.8 0 128C0 123.2 2.985 118.9 7.491 117.2zM359.5 373.2L416 352L437.2 295.5C438.9 290.1 443.2 288 448 288C452.8 288 457.1 290.1 458.8 295.5L480 352L536.5 373.2C541 374.9 544 379.2 544 384C544 388.8 541 393.1 536.5 394.8L480 416L458.8 472.5C457.1 477 452.8 480 448 480C443.2 480 438.9 477 437.2 472.5L416 416L359.5 394.8C354.1 393.1 352 388.8 352 384C352 379.2 354.1 374.9 359.5 373.2z"></path>
+                    </svg>&nbsp;Beautify</button></h6>
+                    
+                    <!-- Code editor -->
+                    <div class="d-flex flex-column flex-fill" style="overflow: hidden;margin-bottom: 10px; background-color: #1e1e1e; padding: 4px; border-radius: 4px;">
+                        <ngx-monaco-editor class="h-100" [options]="templateEditorOptions" [(ngModel)]="templateEditorCode" style="text-align: left;"></ngx-monaco-editor>
+                    </div>
+                    <!-- End: Code editor -->
+
+                </div><!-- End: edit-message-b -->
+                <!-- Start: edit-message-options -->
+                <div class="row">
+                    <div class="col">
+                        <!-- Start: back --><button (click)="this.closeTemplateEditorOrRawSend()" class="btn btn-dark btn-sm float-start" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-warning" style="margin-top: -3px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM384 288H205.3l49.38 49.38c12.5 12.5 12.5 32.75 0 45.25s-32.75 12.5-45.25 0L105.4 278.6C97.4 270.7 96 260.9 96 256c0-4.883 1.391-14.66 9.398-22.65l103.1-103.1c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L205.3 224H384c17.69 0 32 14.33 32 32S401.7 288 384 288z"></path>
+                            </svg>&nbsp;Back to templates</button><!-- End: back -->
+                        <!-- Start: new --><button *ngIf="this.isTemplateEditorSendRawMode" (click)="this.sendRawMessage()" class="btn btn-success btn-sm float-end" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 512 512" width="1em" height="1em" fill="currentColor" style="margin-top: -3px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M285.6 444.1C279.8 458.3 264.8 466.3 249.8 463.4C234.8 460.4 223.1 447.3 223.1 432V256H47.1C32.71 256 19.55 245.2 16.6 230.2C13.65 215.2 21.73 200.2 35.88 194.4L387.9 50.38C399.8 45.5 413.5 48.26 422.6 57.37C431.7 66.49 434.5 80.19 429.6 92.12L285.6 444.1z"></path>
+                            </svg>&nbsp;Send</button><!-- End: new -->
+                        <!-- Start: new --><button *ngIf="!this.isTemplateEditorSendRawMode && this.activeTopic != ''" (click)="this.saveTemplateAndSend()" class="btn btn-success btn-sm float-end" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 512 512" width="1em" height="1em" fill="currentColor" style="margin-top: -3px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M285.6 444.1C279.8 458.3 264.8 466.3 249.8 463.4C234.8 460.4 223.1 447.3 223.1 432V256H47.1C32.71 256 19.55 245.2 16.6 230.2C13.65 215.2 21.73 200.2 35.88 194.4L387.9 50.38C399.8 45.5 413.5 48.26 422.6 57.37C431.7 66.49 434.5 80.19 429.6 92.12L285.6 444.1z"></path>
+                            </svg>&nbsp;Save and send</button><!-- End: new -->
+                        <!-- Start: save --><button *ngIf="!this.isTemplateEditorSendRawMode" (click)="this.saveTemplateChanges()" class="btn btn-dark btn-sm float-end" type="button" style="margin-right: 10px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 512 512" width="1em" height="1em" fill="currentColor" class="text-primary" style="margin-top: -3px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M433.1 129.1l-83.9-83.9C342.3 38.32 327.1 32 316.1 32H64C28.65 32 0 60.65 0 96v320c0 35.35 28.65 64 64 64h320c35.35 0 64-28.65 64-64V163.9C448 152.9 441.7 137.7 433.1 129.1zM224 416c-35.34 0-64-28.66-64-64s28.66-64 64-64s64 28.66 64 64S259.3 416 224 416zM320 208C320 216.8 312.8 224 304 224h-224C71.16 224 64 216.8 64 208v-96C64 103.2 71.16 96 80 96h224C312.8 96 320 103.2 320 112V208z"></path>
+                            </svg>&nbsp;Save message</button><!-- End: save -->
+                    </div>
+                </div><!-- End: edit-message-options -->
+            </div>
+        </div>
+    </div>
+    <!-- End: template-edit-bar -->    
+
+    <!-- Start: consume-bar -->
+    <div *ngIf="!this.isShowingMessageDetails" class="col-5 align-self-center h-100">
+        <div class="card card-form h-100 flex-grow-0" style="width: 100%;">
+            <div class="card-body text-center d-flex flex-column flex-grow-0 h-100">
+                <div class="row">
+                    <div class="col">
+                        <!-- Start: pause --><button *ngIf="this.activeTopic != '' && !this.isConsumerPaused" (click)="this.pauseConsumer()" class="btn btn-dark btn-sm float-end" data-bs-toggle="tooltip" data-bss-tooltip="" data-bs-placement="bottom" type="button" style="margin-top: -3px;" title="Pause consumption"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-96 0 512 512" width="1em" height="1em" fill="currentColor" class="text-primary" style="margin-top: -4px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M272 63.1l-32 0c-26.51 0-48 21.49-48 47.1v288c0 26.51 21.49 48 48 48L272 448c26.51 0 48-21.49 48-48v-288C320 85.49 298.5 63.1 272 63.1zM80 63.1l-32 0c-26.51 0-48 21.49-48 48v288C0 426.5 21.49 448 48 448l32 0c26.51 0 48-21.49 48-48v-288C128 85.49 106.5 63.1 80 63.1z"></path>
+                            </svg></button><!-- End: pause -->
+                        <!-- Start: resume --><button *ngIf="this.activeTopic != '' && this.isConsumerPaused" (click)="this.resumeConsumer()" class="btn btn-dark btn-sm float-end" data-bs-toggle="tooltip" data-bss-tooltip="" data-bs-placement="bottom" type="button" style="margin-top: -3px;" title="Resume consumption"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-64 0 512 512" width="1em" height="1em" fill="currentColor" class="text-success" style="margin-top: -4px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M361 215C375.3 223.8 384 239.3 384 256C384 272.7 375.3 288.2 361 296.1L73.03 472.1C58.21 482 39.66 482.4 24.52 473.9C9.377 465.4 0 449.4 0 432V80C0 62.64 9.377 46.63 24.52 38.13C39.66 29.64 58.21 29.99 73.03 39.04L361 215z"></path>
+                            </svg></button><!-- End: resume --><span *ngIf="this.activeTopic != '' && !this.isConsumerPaused" (click)="this.resumeConsumer()" class="text-secondary float-end user-noselect" style="padding-bottom: 0;margin-top: 0;margin-right: 7px;">Consuming</span><span *ngIf="this.activeTopic != '' && this.isConsumerPaused" class="text-secondary float-end user-noselect" style="padding-bottom: 0;margin-top: 0;margin-right: 7px;">Paused</span>
+                        <h5 class="text-truncate text-start"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-warning" style="margin-top: -4px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM382.6 302.6l-103.1 103.1C270.7 414.6 260.9 416 256 416c-4.881 0-14.65-1.391-22.65-9.398L129.4 302.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 306.8V128c0-17.69 14.33-32 32-32s32 14.31 32 32v178.8l49.38-49.38c12.5-12.5 32.75-12.5 45.25 0S395.1 290.1 382.6 302.6z"></path>
+                            </svg>&nbsp;Consumption</h5>
+                    </div>
+                </div>
+                <hr style="margin-right: 12px;margin-left: 12px;margin-top: 1px;">
+                <!-- Start: messages -->
+                <div *ngIf="this.activeTopic == ''" class="flex-fill" style="overflow: auto;padding-right: 3px;padding-left: 3px;margin-bottom: 10px;">
+
+                    <!-- Start: select-topic-span -->
+                    <h6 class="text-truncate text-center text-info d-flex justify-content-center align-items-center h-100" style="margin-bottom: 0px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" style="margin-top: 2px;">
+                        <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                        <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"></path>
+                    </svg>&nbsp;Select a topic to subscribe</h6><!-- End: select-topic-span -->
+
+                </div><!-- End: messages -->
+                <!-- Start: messages (2) -->
+                <div *ngIf="this.activeTopic != ''" class="flex-fill" style="overflow: auto;padding-right: 3px;padding-left: 3px;margin-bottom: 10px;">
+
+                    <!-- Start: waiting-span -->
+                    <h6 *ngIf="this.receivedMessages.length < 1" class="text-truncate text-center text-info d-flex justify-content-center align-items-center h-100" style="margin-bottom: 0px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" style="margin-top: 2px;">
+                        <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                        <path d="M256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512zM232 256C232 264 236 271.5 242.7 275.1L338.7 339.1C349.7 347.3 364.6 344.3 371.1 333.3C379.3 322.3 376.3 307.4 365.3 300L280 243.2V120C280 106.7 269.3 96 255.1 96C242.7 96 231.1 106.7 231.1 120L232 256z"></path>
+                    </svg>&nbsp;Waiting for incoming messages</h6><!-- End: waiting-span -->
+
+                    <!-- Start: inc-message -->
+                    <div *ngFor="let message of this.receivedMessages; index as i; first as isFirst" class="card card-darker w-100" style="margin-bottom: 3px;">
+                        <div (click)="this.showMessageDetails(message)" class="card-body pointer-cursor w-100">
+                            <div class="row">
+                                <div class="col-md-6 col-lg-7 col-xl-7 col-xxl-8">
+                                    <h6 class="text-truncate text-start text-info" style="margin-bottom: 0px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -64 640 640" width="1em" height="1em" fill="currentColor" style="margin-top: -3px;">
+                                            <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                            <path d="M464 64C490.5 64 512 85.49 512 112C512 127.1 504.9 141.3 492.8 150.4L478.9 160.8C412.3 167.2 356.5 210.8 332.6 270.6L275.2 313.6C263.8 322.1 248.2 322.1 236.8 313.6L19.2 150.4C7.113 141.3 0 127.1 0 112C0 85.49 21.49 64 48 64H464zM294.4 339.2L320.8 319.4C320.3 324.9 320 330.4 320 336C320 378.5 335.1 417.6 360.2 448H64C28.65 448 0 419.3 0 384V176L217.6 339.2C240.4 356.3 271.6 356.3 294.4 339.2zM640 336C640 415.5 575.5 480 496 480C416.5 480 352 415.5 352 336C352 256.5 416.5 192 496 192C575.5 192 640 256.5 640 336zM540.7 292.7L480 353.4L451.3 324.7C445.1 318.4 434.9 318.4 428.7 324.7C422.4 330.9 422.4 341.1 428.7 347.3L468.7 387.3C474.9 393.6 485.1 393.6 491.3 387.3L563.3 315.3C569.6 309.1 569.6 298.9 563.3 292.7C557.1 286.4 546.9 286.4 540.7 292.7H540.7z"></path>
+                                        </svg>&nbsp;Key: {{this.getMessageStringKey(message)}}</h6>
+                                </div>
+                                <div class="col-md-6 col-lg-5 col-xl-5 col-xxl-4">
+                                    <h6 class="text-truncate text-end text-secondary" style="margin-bottom: 0px;">{{this.getDateFormatted(message.timestamp)}}</h6>
+                                </div>
+                            </div>
+                            <div class="row w-100" style="margin-top: 5px;">
+                                <div class="col w-100"><span class="text-start float-start w-100 text-truncate" style="font-size: 14px;overflow: hidden;text-overflow: ellipsis;"><span style="color: rgba(255, 255, 255, 0.5);">{{this.getMessageStringValue(message)}}</span><br></span></div>
+                            </div>
+                        </div><svg *ngIf="this.shouldShowNewMessageIcon(message.timestamp)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" data-bs-toggle="tooltip" data-bss-tooltip="" class="corner-icon" title="Recent message">
+                            <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                            <path d="M256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512zM232 256C232 264 236 271.5 242.7 275.1L338.7 339.1C349.7 347.3 364.6 344.3 371.1 333.3C379.3 322.3 376.3 307.4 365.3 300L280 243.2V120C280 106.7 269.3 96 255.1 96C242.7 96 231.1 106.7 231.1 120L232 256z"></path>
+                        </svg>
+                    </div><!-- End: inc-message -->
+           
+                </div><!-- End: messages (2) -->
+                <!-- Start: messages-options -->
+                <div class="row">
+                    <div class="col">
+                        <!-- Start: clear --><button (click)="this.cleanupMessagesUserAction()" class="btn btn-dark btn-sm float-end" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-warning" style="margin-top: -3px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M480 416C497.7 416 512 430.3 512 448C512 465.7 497.7 480 480 480H150.6C133.7 480 117.4 473.3 105.4 461.3L25.37 381.3C.3786 356.3 .3786 315.7 25.37 290.7L258.7 57.37C283.7 32.38 324.3 32.38 349.3 57.37L486.6 194.7C511.6 219.7 511.6 260.3 486.6 285.3L355.9 416H480zM265.4 416L332.7 348.7L195.3 211.3L70.63 336L150.6 416L265.4 416z"></path>
+                            </svg>&nbsp;Clear history</button><!-- End: clear -->
+                    </div>
+                </div><!-- End: messages-options -->
+            </div>
+        </div>
+    </div>
+    <!-- End: consume-bar -->
+
+    <!-- Start: message-detail-bar -->
+    <div *ngIf="this.isShowingMessageDetails" class="col-5 align-self-center h-100">
+        <div class="card card-form h-100 flex-grow-0" style="width: 100%;">
+            <div class="card-body text-center d-flex flex-column flex-grow-0 h-100">
+                <div class="row">
+                    <div class="col">
+                        <!-- Start: xToggle -->
+                        <h5 class="text-truncate text-start"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="1em" height="1em" fill="currentColor" class="text-info" style="margin-top: -4px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z"></path>
+                            </svg>&nbsp;Message details</h5>
+                    </div>
+                </div>
+                <hr style="margin-right: 12px;margin-left: 12px;margin-top: 1px;"><!-- Start: read-message-b -->
+                <div class="flex-fill d-flex flex-column" style="overflow: auto;padding-right: 3px;padding-left: 3px;margin-bottom: 10px;">
+                    <h6 class="text-truncate text-start text-info" style="padding-bottom: 3px;">Message key</h6><input type="text" placeholder="162a698b-9b84-4000-9e7b-d59fdaa4f693" style="width: 100%;" readonly="" value="{{this.getMessageStringKey(this.messageToShowDetails)}}">
+                    <h6 class="text-truncate text-start text-info" style="margin-top: 7px;padding-bottom: 3px;">Message body</h6>
+                    
+                    <!-- Start: message-edit-e -->
+                    <div class="d-flex flex-column flex-fill" style="overflow: hidden;margin-bottom: 10px; background-color: #1e1e1e; padding: 4px; border-radius: 4px;">
+                        <ngx-monaco-editor class="h-100" [options]="messageViewerOptions" [(ngModel)]="messageViewerCode" style="text-align: left;"></ngx-monaco-editor>
+                    </div>
+                    <!-- End: message-edit-e -->
+
+                </div><!-- End: read-message-b -->
+                <!-- Start: read-message-options -->
+                <div class="row">
+                    <div class="col">
+                        <!-- Start: back --><button (click)="this.backToMessageList()" class="btn btn-dark btn-sm float-start" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-warning" style="margin-top: -3px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M256 0C114.6 0 0 114.6 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256C512 114.6 397.4 0 256 0zM384 288H205.3l49.38 49.38c12.5 12.5 12.5 32.75 0 45.25s-32.75 12.5-45.25 0L105.4 278.6C97.4 270.7 96 260.9 96 256c0-4.883 1.391-14.66 9.398-22.65l103.1-103.1c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L205.3 224H384c17.69 0 32 14.33 32 32S401.7 288 384 288z"></path>
+                            </svg>&nbsp;Back to messages</button><!-- End: back -->
+                        <!-- Start: save --><button (click)="this.copyMessageBodyToClipboard()" class="btn btn-dark btn-sm float-end" type="button" style="margin-right: 10px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-primary" style="margin-top: -3px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M384 96L384 0h-112c-26.51 0-48 21.49-48 48v288c0 26.51 21.49 48 48 48H464c26.51 0 48-21.49 48-48V128h-95.1C398.4 128 384 113.6 384 96zM416 0v96h96L416 0zM192 352V128h-144c-26.51 0-48 21.49-48 48v288c0 26.51 21.49 48 48 48h192c26.51 0 48-21.49 48-48L288 416h-32C220.7 416 192 387.3 192 352z"></path>
+                            </svg>&nbsp;Copy body to clipboard</button><!-- End: save -->
+                    </div>
+                </div><!-- End: read-message-options -->
+            </div>
+        </div>
+    </div>
+    <!-- End: message-detail-bar -->
+</div>
+<!-- Loading overlay -->
+<app-loading-overlay *ngIf="this.isLoading" [text]="this.loadingText"></app-loading-overlay>
