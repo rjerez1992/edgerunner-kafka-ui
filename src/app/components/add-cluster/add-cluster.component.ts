@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { KafkaClusterInformation } from 'src/app/models/cluster-information';
-import Swal from 'sweetalert2'
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { UserClustersService } from 'src/app/services/user-clusters.service';
 import {v4 as uuidv4} from 'uuid';
