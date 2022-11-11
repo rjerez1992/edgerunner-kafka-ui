@@ -11,9 +11,9 @@ export class DataGenerator {
     //Datatypes
     input = this.replaceTokens(input, "$UUID$", faker.datatype.uuid);
     input = this.replaceTokens(input, "$STRING$", faker.datatype.string);
-    input = this.replaceTokens(input, "$NUMBER$", faker.datatype.number);
-    input = this.replaceTokens(input, "$BIG_NUMBER$", faker.datatype.bigInt);
-    input = this.replaceTokens(input, "$FLOAT$", faker.datatype.float);
+    input = this.replaceTokens(input, "\"$NUMBER$\"", faker.datatype.number);
+    input = this.replaceTokens(input, "\"$BIG_NUMBER$\”", faker.datatype.bigInt);
+    input = this.replaceTokens(input, "\"$FLOAT$\"", faker.datatype.float);
     input = this.replaceTokens(input, "$DATE$", faker.datatype.datetime);
 
     //Names
@@ -22,7 +22,7 @@ export class DataGenerator {
     input = this.replaceTokens(input, "$FULL_NAME$", faker.name.fullName);
 
     //Finnance
-    input = this.replaceTokens(input, "$AMOUNT$", faker.finance.amount);
+    input = this.replaceTokens(input, "\"$AMOUNT$\"", DataGenerator.integerAmount);
     input = this.replaceTokens(input, "$CARD_NUMBER$", faker.finance.creditCardNumber);
     input = this.replaceTokens(input, "$ACCOUNT_NUMBER$", faker.finance.account);
 
@@ -45,6 +45,10 @@ export class DataGenerator {
 
     return input;
   }  
+
+  private static integerAmount(): string {
+    return faker.finance.amount(100, 1000000, 0);
+  }
 
   private static replaceTokens(subject: string, token: string, source: Function): string {
     while (subject.includes(token)){

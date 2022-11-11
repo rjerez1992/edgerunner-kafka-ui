@@ -481,7 +481,7 @@ export class ExplorerComponent implements OnInit {
 
   generatorsTips(): void {
     SwalHelpers.showHTMLTextSwal(`
-    Use tokens in your JSON to replace them with random values<br>
+    Use tokens in your JSON to replace them with random values. Tokens must be always used with double quotes.<br>.
     <br>
     Datatypes:<br>
     <b>$UUID$, $STRING$, $NUMBER$, $BIG_NUMBER$, $FLOAT$, $DATE$</b><br>
