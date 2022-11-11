@@ -82,4 +82,19 @@ export class SwalHelpers {
     }
   }
 
+  public static triggerToastWithAction(icon: string, message: string, buttonText: string, onConfirm: Function){
+    if (icon == 'success' || icon == 'warning' || icon == 'error' || icon == 'info' || icon == 'question'){
+      Toast.fire({
+        icon: icon,
+        title: message,
+        showConfirmButton: true,
+        confirmButtonText: buttonText,
+        timer: 5000,
+      }).then((result) => {
+        if (result.isConfirmed) {     
+          onConfirm();
+        }
+      })
+    }
+  }
 } 

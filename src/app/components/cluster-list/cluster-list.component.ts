@@ -9,6 +9,7 @@ import { UserClustersService } from 'src/app/services/user-clusters.service';
 import { SwalHelpers } from 'src/app/utils/swal-helpers';
 import { KafkaClusterInformation } from '../../models/cluster-information'
 import { Buffer } from 'buffer';
+import { GithubHelperService } from 'src/app/services/github-helper.service';
 
 @Component({
   selector: 'app-cluster-list',
@@ -21,6 +22,10 @@ export class ClusterListComponent implements OnInit {
   public userClusters: Array<KafkaClusterInformation>;
   public loadingText: string = "";
 
+  private isConnecting : boolean = false;
+
+  private releasesURL : string = "https://github.com/rjerez1992/edgerunner-kafka-ui/releases";
+
   constructor(
     private kafkaService: KafkaService, 
     private cdRef: ChangeDetectorRef,
@@ -28,7 +33,8 @@ export class ClusterListComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private generalParamsService: GeneralParamsService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private githubHelperService: GithubHelperService
   ) {}
   
   ngOnInit(): void { 
@@ -42,6 +48,7 @@ export class ClusterListComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    this.lookForUpdates();
     this.loadUserClusters();
     this.cdRef.detectChanges();
   }
@@ -56,6 +63,12 @@ export class ClusterListComponent implements OnInit {
   }
 
   exploreCluster(id: string){
+    if (this.isConnecting){
+      console.warn("There is already a connection attemp in progress");
+      return;
+    }
+    this.isConnecting = true;
+
     console.log("Trying to connect to cluster with ID: " + id);
     this.setLoading("Connecting to cluster");
     let targetCluster = this.userClusters.find(x => x.id == id);
@@ -70,11 +83,13 @@ export class ClusterListComponent implements OnInit {
             targetCluster.plainPassword = pass;
             this.kafkaService.connectToCluster(targetCluster).then((value) => {
               this.isLoading = false;
+              this.isConnecting = false;
               this.router.navigate(['/', 'explore']);
             }).catch((e) => {
               console.error("Unable to connect to cluster");
               console.error(e);
               this.isLoading = false;
+              this.isConnecting = false;
               SwalHelpers.showErrorSwal("Unable to connect to cluster. Check the configuration.");
             });
           }
@@ -82,11 +97,13 @@ export class ClusterListComponent implements OnInit {
       } else {
         this.kafkaService.connectToCluster(targetCluster).then((value) => {
           this.isLoading = false;
+          this.isConnecting = false;
           this.router.navigate(['/', 'explore']);
         }).catch((e) => {
           console.error("Unable to connect to cluster");
           console.error(e);
           this.isLoading = false;
+          this.isConnecting = false;
           SwalHelpers.showErrorSwal("Unable to connect to cluster. Check the configuration.");
         });
       }
@@ -123,5 +140,21 @@ export class ClusterListComponent implements OnInit {
     if(action.action == actionShowToast){
       SwalHelpers.triggerToast(action.type, action.value);
     }
+  }
+
+  lookForUpdates() {
+    window.utils.appVersion().then((currentVersion) => {
+      console.log("Current app version:"+currentVersion);
+      this.githubHelperService.hasNewVersion(currentVersion, (hasUpdate: boolean) => {
+        if (!hasUpdate){
+          console.log("New version available");
+          SwalHelpers.triggerToastWithAction("info", "New version available", "Go to Github", () => {
+            window.utils.openLink(this.releasesURL);
+          });
+        } else {
+          console.log("Running on latest version");
+        }
+      });
+    });
   }
 }

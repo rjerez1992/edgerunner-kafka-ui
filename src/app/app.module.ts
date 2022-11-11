@@ -11,6 +11,7 @@ import { AddClusterComponent } from './components/add-cluster/add-cluster.compon
 import { ExplorerComponent } from './components/explorer/explorer.component';
 import { FormsModule } from '@angular/forms';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
     AppRoutingModule,
     FormsModule,
     MonacoEditorModule.forRoot(),
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

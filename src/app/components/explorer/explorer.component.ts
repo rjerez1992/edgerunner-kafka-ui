@@ -120,6 +120,7 @@ export class ExplorerComponent implements OnInit {
 
   loadTopicsList(){
     this.setLoading("Loading topics list");
+    this.cdRef.detectChanges();
     console.log("Fetching topic list");
     //TODO: This will fail if admin is not available
     this.kafkaService.topicsList().then((value)=>{
