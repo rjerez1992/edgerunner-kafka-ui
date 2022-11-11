@@ -3,7 +3,7 @@
 
 # Edgerunner - Kafka Consumer/Producer UI
 
-Edgerunner is a very basic UI for consuming and producing JSON data to Kafka clusters. Keep in mind
+Edgerunner is a very basic Kafka UI tool for consuming and producing JSON data to Kafka clusters. Keep in mind
 this is not a cluster management tool and it was only made for its very specific purpose.
 
 ## State    
@@ -33,6 +33,7 @@ Since this is an "alpha" release, development tools are also enabled and some se
 ## Limitations
 
 - Credentials with cluster Admin access are required to fetch topic's list.
+- Minify/beautify JSON doesn't work when using data generators without double quotes (for numbers for example)
 
 
 ## Screenshots
@@ -49,7 +50,7 @@ Since this is an "alpha" release, development tools are also enabled and some se
 
 ## Requests
 
-Baside upcoming features, there isn't anything else planned. If you require
+Beside upcoming features, there isn't anything else planned. If you require
 something like a new connection protocol or another message type (XML for example), 
 please open an issue and I'll what I can do.
 
