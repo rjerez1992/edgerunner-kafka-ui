@@ -146,7 +146,7 @@ export class ClusterListComponent implements OnInit {
     window.utils.appVersion().then((currentVersion) => {
       console.log("Current app version:"+currentVersion);
       this.githubHelperService.hasNewVersion(currentVersion, (hasUpdate: boolean) => {
-        if (!hasUpdate){
+        if (hasUpdate){
           console.log("New version available");
           SwalHelpers.triggerToastWithAction("info", "New version available", "Go to Github", () => {
             window.utils.openLink(this.releasesURL);

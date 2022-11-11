@@ -445,8 +445,14 @@ export class ExplorerComponent implements OnInit {
     if (!this.newMessageIconShownRecord.includes(timestamp)){
       this.newMessageIconShownRecord.push(timestamp);
       return true;
+    } else if (this.elapsedSecondsSinceTimestamp(timestamp) <= 3){
+      return true;
     }
     return false;
+  }
+
+  elapsedSecondsSinceTimestamp(timestamp: string) : number{
+    return (Date.now() - Number(timestamp)) / 1000 
   }
 
   beautifyCode(): void {
