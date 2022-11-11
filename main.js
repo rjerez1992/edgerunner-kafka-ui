@@ -1,4 +1,4 @@
-const { app, ipcMain, BrowserWindow, safeStorage, shell } = require("electron");
+const { app, ipcMain, BrowserWindow, safeStorage, shel, dialog } = require("electron");
 const ElectronStore = require('electron-store');
 
 let appWin;
@@ -31,8 +31,26 @@ createWindow = () => {
     // External link
     ipcMain.handle('openLink', (event, ...args) => shell.openExternal(args[0]));
     
-    // Play theme
-    //ipcMain.handle('playTheme', () => playTheme());
+    // Save and read files
+    ipcMain.handle('saveToFile', (event, ...args) => {
+        var selectedPath = dialog.showSaveDialogSync({ defaultPath: args[1] });
+        if(selectedPath){
+            require('fs').writeFileSync(selectedPath, args[0]);
+            return true;
+        }
+        return false;
+    }); 
+    ipcMain.handle('readFromFile', (event, ...args) => {
+        var selectedPaths = dialog.showOpenDialogSync({ properties: ['openFile'], filters: [
+            { name: 'JSON', extensions: ['json', 'jsn', 'txt'] },
+            { name: 'All Files', extensions: ['*'] }
+        ]});
+        if(selectedPaths.length > 0){
+            const data = require('fs').readFileSync(selectedPaths[0],{encoding:'utf8', flag:'r'});
+            return data;
+        }
+        return "";
+    }); 
 
     appWin.loadURL(`file://${__dirname}/dist/index.html`);
 

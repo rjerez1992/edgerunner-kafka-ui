@@ -1,6 +1,6 @@
 {
   "name": "edgerunner",
-  "version": "1.0.0-a3",
+  "version": "1.3.0-a3",
   "main": "main.js",
   "scripts": {
     "ng": "ng",

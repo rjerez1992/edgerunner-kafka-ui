@@ -273,21 +273,77 @@ export class ExplorerComponent implements OnInit {
   }
 
   exportSingleTemplate(template: UserMessageTemplate){
-    console.log("I want to export a single template");
-    SwalHelpers.triggerToast("info", "Upcoming feature. Wait for it.");
-    //
+    console.log("Exporting template "+template.name);
+    let name = "e_template_"+template.name+".json";
+    let ouput = JSON.stringify(template);
+    window.files.save(ouput, name).then((result) => {
+      if (result){
+        SwalHelpers.triggerToast("success", "Template exported");
+      } else {
+        SwalHelpers.triggerToast("error", "Unable to export template");
+      }
+    }), () => {
+      SwalHelpers.triggerToast("error", "Unable to export template");
+    };
   }
 
   importTemplate(): void {
-    console.log("I want to import a template or collection");
-    SwalHelpers.triggerToast("info", "Upcoming feature. Wait for it.");
-    //
+    console.log("Importing templates");
+    window.files.read().then((fileData) => {
+      if (fileData){
+        this.processImportData(fileData);
+      } else {
+        SwalHelpers.triggerToast("error", "Unable import data");
+      }
+    }), () => {
+      SwalHelpers.triggerToast("error", "Unable import data");
+    };
+  }
+
+  private processImportData(data: string){
+    if (data == ""){
+      SwalHelpers.triggerToast("error", "Empty import data");
+      return;
+    }
+
+    let parsedData;
+
+    try {
+      parsedData = JSON.parse(data);
+    } catch (e){
+      SwalHelpers.triggerToast("error", "Unable to parse data");
+      return;
+    }
+
+    if (Array.isArray(parsedData)){
+      //Collection
+      let templatesToImport = parsedData as UserMessageTemplate[];
+      for(let i=0; i<templatesToImport.length; i++){
+        this.userTemplatesService.addUserTemplate(templatesToImport[i]);
+      }
+      SwalHelpers.triggerToast("success", "Collection exported");
+    } else {
+      let templateToImport = parsedData as UserMessageTemplate;
+      this.userTemplatesService.addUserTemplate(templateToImport);
+      SwalHelpers.triggerToast("success", "Template imported");
+    }
+
+    this.loadUserTemplates();
   }
 
   exportCollection(): void {
-    console.log("I want to export the collection of templates");
-    SwalHelpers.triggerToast("info", "Upcoming feature. Wait for it.");
-    //
+    console.log("Exporting user messages collection");
+    let name = "e_templates_collection.json";
+    let ouput = JSON.stringify(this.templates);
+    window.files.save(ouput, name).then((result) => {
+      if (result){
+        SwalHelpers.triggerToast("success", "Collection exported");
+      } else {
+        SwalHelpers.triggerToast("error", "Unable to export collection");
+      }
+    }), () => {
+      SwalHelpers.triggerToast("error", "Unable to export collection");
+    };
   }
 
   closeTemplateEditorOrRawSend(): void {

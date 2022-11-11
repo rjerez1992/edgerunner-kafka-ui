@@ -11,6 +11,11 @@ contextBridge.exposeInMainWorld('store', {
   safeGet: (encryptedValue) => ipcRenderer.invoke('decrypt', encryptedValue)
 })
 
+contextBridge.exposeInMainWorld('files', {
+  save: (output, name) => ipcRenderer.invoke('saveToFile', output, name),
+  read: () => ipcRenderer.invoke('readFromFile'),
+})
+
 contextBridge.exposeInMainWorld('utils', {
   appVersion: () => ipcRenderer.invoke('appVersion'),
   openLink: (url) => ipcRenderer.invoke('openLink', url),

@@ -8,6 +8,11 @@ export interface IStoreAPI {
   safeGet: (encryptedValue: Buffer) => Promise<string>
 }
 
+export interface IFileAPI {
+  save: (output: string, name: string) => Promise<boolean>,
+  read: () => Promise<string>
+}
+
 export interface IKafkaAPI {
   connect: (clusterInformation: KafkaClusterInformation, errorCallback: Function) => Promise<boolean>,
   topics: () => Promise<string[]>,
@@ -29,6 +34,7 @@ declare global {
   interface Window {
     store: IStoreAPI,
     kafka: IKafkaAPI,
+    files: IFileAPI,
     utils: IUtilsAPI
   }
 }
