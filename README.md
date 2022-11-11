@@ -17,7 +17,8 @@ Since this is an "alpha" release, development tools are also enabled and some se
 - Password storage using system's keychain.
 - Connect to local clusters without security and remote clusters using SSL/SASL.
 - Protect clusters from production with "Read-only" mode.
-- Manage a collection of template messages for production.
+- Manage a collection of template messages for production
+- Export and import your message templates.
 - Rich editor for JSON messages. (Monaco)
 - Create new topics.
 - Subscribe to topics and consume messages.
@@ -26,15 +27,13 @@ Since this is an "alpha" release, development tools are also enabled and some se
 
 ## Upcoming
 
-- Import/export templates and collection.
 - Test connection on add/edit cluster data.
 - Template versioning and groups.
 
-## Limitations
+## Limitations and bugs
 
 - Credentials with cluster Admin access are required to fetch topic's list.
-- Minify/beautify JSON doesn't work when using data generators without double quotes (for numbers for example)
-
+- Cluster sessions might close when suspending the device.
 
 ## Screenshots
 
@@ -58,8 +57,6 @@ please open an issue and I'll what I can do.
 
 Contributions are always welcome. Don't hesistate to open a PR.
 (Specially code refactoring because ngl it's a mess 😄)
-
-
 
 ## License
 
