@@ -14,7 +14,7 @@ export interface IFileAPI {
 }
 
 export interface IKafkaAPI {
-  connect: (clusterInformation: KafkaClusterInformation, errorCallback: Function) => Promise<boolean>,
+  connect: (clusterInformation: KafkaClusterInformation, securedPass: string, errorCallback: Function) => Promise<boolean>,
   topics: () => Promise<string[]>,
   create: (topicName: string) => Promise<boolean>,
   subscribe: (topic: string, messageCallback: Function) => Promise<void>,

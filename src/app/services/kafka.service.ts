@@ -5,6 +5,8 @@ import { actionShowToast } from '../definitions/constants';
 import { KafkaClusterInformation } from '../models/cluster-information';
 import { NavigationAction } from '../models/navigation-action';
 import {v4 as uuidv4} from 'uuid';
+import { StorageService } from './storage.service';
+import { Buffer } from 'buffer';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +19,8 @@ export class KafkaService {
   private isChangingTopics : boolean = false;
   
   constructor(
-    private router: Router
+    private router: Router,
+    private storageService: StorageService
   ) { }
 
   async connectToCluster(clusterInformation: KafkaClusterInformation): Promise<boolean> {
@@ -27,13 +30,19 @@ export class KafkaService {
     }
     this.cluster = clusterInformation;
     try {
-      const value = await window.kafka.connect(this.cluster, (errorType: string) => {
+      let securedPassword = await this.getSecurePassword();
+      const value = await window.kafka.connect(this.cluster, securedPassword, (errorType: string) => {
         if (errorType == "CRASH"){
           this.cleanAndReturnWithError("Unexpected crash");
         } else if (errorType == "DISCONNECT" && this.connected && !this.isChangingTopics){
           this.cleanAndReturnWithError("Unexpected disconnection");
         }
       });
+      if (!value){
+        console.error("Unable to connect to cluster. Returned false");
+        this.connected = false;
+        return false;
+      }
       this.connected = true;
       return true;
     } catch (e) {
@@ -157,5 +166,13 @@ export class KafkaService {
       value: error
     } 
     this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
+  }
+
+  getSecurePassword(): Promise<string> {
+    if (this.cluster.securedPassword){
+      let encryptedPassword = Buffer.from(this.cluster.encryptedPassword);
+      return this.storageService.safeGet(encryptedPassword);
+    }
+    return Promise.resolve("");
   }
 }

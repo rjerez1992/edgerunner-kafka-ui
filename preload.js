@@ -23,7 +23,7 @@ contextBridge.exposeInMainWorld('utils', {
 })
 
 contextBridge.exposeInMainWorld('kafka', {
-  connect: (clusterInformation, errorCallback) => connectCluster(clusterInformation, errorCallback),
+  connect: (clusterInformation, securedPass, errorCallback) => connectCluster(clusterInformation, securedPass, errorCallback),
   topics: () => topicList(),
   create: (topicName) => createTopic(topicName),
   subscribe: (targetTopic, messageCallback) => subscribeToTopic(targetTopic, messageCallback),

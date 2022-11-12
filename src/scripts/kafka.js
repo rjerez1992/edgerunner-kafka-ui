@@ -1,4 +1,5 @@
 const { Kafka, logLevel } = require('kafkajs')
+const { safeStorage } = require("electron");
 
 let activeCluster = undefined;
 let activeConsumer = undefined;
@@ -14,13 +15,19 @@ let errorCallbackActiveConsumer;
 let isConsumerPaused = false;
 let activeTopic = "";
 
-exports.connectCluster = async function (clusterInformation, errorCallback) {
+exports.connectCluster = async function (clusterInformation, securedPass, errorCallback) {
     if (activeCluster){
         console.error("KafkaJS: There is already an active cluster when trying connect to a new one");
         return false;
     }
     console.log("KafkaJS: Connecting to a Kafka cluster");
     console.log(clusterInformation);
+
+    var pass = clusterInformation.plainPassword;
+    if (securedPass != ""){
+        pass = securedPass;
+    }
+
     activeCluster =  new Kafka({
         //logLevel: logLevel.DEBUG,
         clientId: clusterInformation.clientName,
@@ -34,7 +41,7 @@ exports.connectCluster = async function (clusterInformation, errorCallback) {
         {
             mechanism: 'plain',
             username: clusterInformation.username,
-            password: clusterInformation.plainPassword //NOTE: When connecting encrypted password is copied over to plain password.
+            password: pass
         } : false
     });
 

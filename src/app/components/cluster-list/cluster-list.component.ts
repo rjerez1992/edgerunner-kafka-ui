@@ -8,7 +8,6 @@ import { StorageService } from 'src/app/services/storage.service';
 import { UserClustersService } from 'src/app/services/user-clusters.service';
 import { SwalHelpers } from 'src/app/utils/swal-helpers';
 import { KafkaClusterInformation } from '../../models/cluster-information'
-import { Buffer } from 'buffer';
 import { GithubHelperService } from 'src/app/services/github-helper.service';
 
 @Component({
@@ -68,45 +67,23 @@ export class ClusterListComponent implements OnInit {
       return;
     }
     this.isConnecting = true;
-
+    
     console.log("Trying to connect to cluster with ID: " + id);
     this.setLoading("Connecting to cluster");
     let targetCluster = this.userClusters.find(x => x.id == id);
 
     if (targetCluster){
-
-      if(targetCluster.securedPassword){
-        //Properly manage encrypted passwords for clusters
-        let encryptedPassword = Buffer.from(targetCluster.encryptedPassword);
-        this.storageService.safeGet(encryptedPassword).then((pass) => {
-          if(targetCluster){
-            targetCluster.plainPassword = pass;
-            this.kafkaService.connectToCluster(targetCluster).then((value) => {
-              this.isLoading = false;
-              this.isConnecting = false;
-              this.router.navigate(['/', 'explore']);
-            }).catch((e) => {
-              console.error("Unable to connect to cluster");
-              console.error(e);
-              this.isLoading = false;
-              this.isConnecting = false;
-              SwalHelpers.showErrorSwal("Unable to connect to cluster. Check the configuration.");
-            });
-          }
-        });
-      } else {
-        this.kafkaService.connectToCluster(targetCluster).then((value) => {
-          this.isLoading = false;
-          this.isConnecting = false;
-          this.router.navigate(['/', 'explore']);
-        }).catch((e) => {
-          console.error("Unable to connect to cluster");
-          console.error(e);
-          this.isLoading = false;
-          this.isConnecting = false;
-          SwalHelpers.showErrorSwal("Unable to connect to cluster. Check the configuration.");
-        });
-      }
+      this.kafkaService.connectToCluster(targetCluster).then((value) => {
+        this.isLoading = false;
+        this.isConnecting = false;
+        this.router.navigate(['/', 'explore']);
+      }).catch((e) => {
+        console.error("Unable to connect to cluster");
+        console.error(e);
+        this.isLoading = false;
+        this.isConnecting = false;
+        SwalHelpers.showErrorSwal("Unable to connect to cluster. Check the configuration.");
+      });
     } else {
       SwalHelpers.showErrorSwal("Unable to find cluster configuration. Unkown error.");
     }   
