@@ -105,3 +105,6 @@ dist
 
 # Angular cache folder
 .angular/
+
+# Electron build folder
+out/
