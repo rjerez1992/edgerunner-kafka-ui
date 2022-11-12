@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import {v4 as uuidv4} from 'uuid';
 import { KafkaMessage } from 'kafkajs';
-import { actionShowToast, headerExploreCluster } from 'src/app/definitions/constants';
+import { actionShowToast, dataGeneratorDescriptionHTML, headerExploreCluster } from 'src/app/definitions/constants';
 import { NavigationAction } from 'src/app/models/navigation-action';
 import { UserMessageTemplate } from 'src/app/models/user-templates';
 import { GeneralParamsService } from 'src/app/services/general-params.service';
@@ -536,20 +536,7 @@ export class ExplorerComponent implements OnInit {
   }
 
   generatorsTips(): void {
-    SwalHelpers.showHTMLTextSwal(`
-    Use tokens in your JSON to replace them with random values. Tokens must be always used with double quotes.<br>.
-    <br>
-    Datatypes:<br>
-    <b>$UUID$, $STRING$, $NUMBER$, $BIG_NUMBER$, $FLOAT$, $DATE$</b><br>
-    Names:<br>
-    <b>$FIRST_NAME$, $LAST_NAME$, $FULL_NAME$</b><br>
-    Finnancial:<br>
-    <b>$AMOUNT$, $CARD_NUMBER$, $ACCOUNT_NUMBER$</b><br>
-    Address:<br>
-    <b>$COUNTRY$, $CITY$, $STREET$</b><br>
-    Others:<br>
-    <b>$COMPANY_NAME$, $PHONE_NUMBER$, $SENCENTE$</b><br>
-  `);
+    SwalHelpers.showHTMLTextSwal(dataGeneratorDescriptionHTML);
   }
 
   isEditorValidJSON(): boolean {
