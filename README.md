@@ -1,15 +1,14 @@
 
 <img src="https://raw.githubusercontent.com/rjerez1992/edgerunner-kafka-ui/master/imgs/logo.png" width=10% height=10%>
 
-# Edgerunner - Kafka Consumer/Producer UI
+# Edgerunner - Apache Kafka UI Consumer/Producer
 
-Edgerunner is a very basic Kafka UI tool for consuming and producing JSON data to Kafka clusters. Keep in mind
+Edgerunner is a basic Apache Kafka UI tool for consuming and producing JSON data to Kafka clusters. Keep in mind
 this is not a cluster management tool and it was only made for its very specific purpose.
 
 ## State    
 
-⚠️ This is in "alpha" state. It has multiple bugs and things to fix. If you plan to use it for production, please wait for a final release.
-Since this is an "alpha" release, development tools are also enabled and some sensitive information might be logged on the console.
+This is in **beta** stage. Most of the features have been already manually tested but there are some connectivity bugs that might happen from time to time. If you prefer, you can wait for a final release before using this on production environments. __(Check limitations and bugs for more information)__
 
 ## Features
 
@@ -34,6 +33,7 @@ Since this is an "alpha" release, development tools are also enabled and some se
 
 - Credentials with cluster Admin access are required to fetch topic's list.
 - Cluster sessions might close when suspending the device.
+- Some connection errors might not be properly handled.
 
 ## Screenshots
 
@@ -51,7 +51,7 @@ Since this is an "alpha" release, development tools are also enabled and some se
 
 Beside upcoming features, there isn't anything else planned. If you require
 something like a new connection protocol or another message type (XML for example), 
-please open an issue and I'll what I can do.
+please open an issue and I'll see what I can do.
 
 ## Contributing
 
