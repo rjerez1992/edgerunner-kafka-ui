@@ -149,7 +149,7 @@ exports.resumeConsumer = async function () {
     }
 }
 
-exports.kafkaCleanup = async function () {
+exports.kafkaCleanup = async function (callback) {
     console.warn("KafkaJS: Cleaning up connection on request");
     if (activeConsumer){
         await activeConsumer.disconnect();
@@ -172,6 +172,7 @@ exports.kafkaCleanup = async function () {
     isConsumerPaused = false;
 
     console.warn("KafkaJS: Connections cleaned up");
+    callback();
 }
 
 connectConsumer = async (groupId, errorCallback) => {

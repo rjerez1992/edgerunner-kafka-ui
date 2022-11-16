@@ -106,6 +106,14 @@ export class ExplorerComponent implements OnInit {
     this.generalParamsService.setClusterName(this.kafkaService.currentClusterInfo().name);
     this.generalParamsService.setIsSecureMode(this.kafkaService.currentClusterInfo().secureMode);
     this.generalParamsService.setIsReadOnly(this.kafkaService.currentClusterInfo().readOnly);
+    this.kafkaService.errorCallback = () => {
+      let action : NavigationAction = {
+        action: actionShowToast,
+        type: 'error',
+        value: 'Cluster error'
+      } 
+      this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
+    };
   }
 
   ngAfterViewInit() {
@@ -392,13 +400,14 @@ export class ExplorerComponent implements OnInit {
         console.log("Problem with consumption");
         console.log(e);
 
-        this.kafkaService.cleanUpConnection();
-        let action : NavigationAction = {
-          action: actionShowToast,
-          type: 'error',
-          value: 'Consumption failure'
-        } 
-        this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
+        this.kafkaService.cleanUpConnection(() => {
+          let action : NavigationAction = {
+            action: actionShowToast,
+            type: 'error',
+            value: 'Consumption failure'
+          } 
+          this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
+        });
       });
     }
   }

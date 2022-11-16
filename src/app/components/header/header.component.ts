@@ -54,13 +54,14 @@ export class HeaderComponent implements OnInit {
   changeCluster(): void {
     console.log("Trying to change cluster");
     SwalHelpers.showConfirmationWarning("Change cluster", "Are you sure you want to close the current connection?", "Change", ()=>{
-      this.kafkaService.cleanUpConnection();
-      let action : NavigationAction = {
-        action: actionShowToast,
-        type: 'success',
-        value: 'Connection closed'
-      } 
-      this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
+      this.kafkaService.cleanUpConnection(() => {
+        let action : NavigationAction = {
+          action: actionShowToast,
+          type: 'success',
+          value: 'Connection closed'
+        } 
+        this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
+      });
     });
   }
   

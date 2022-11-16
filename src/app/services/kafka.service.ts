@@ -12,6 +12,7 @@ import { Buffer } from 'buffer';
   providedIn: 'root'
 })
 export class KafkaService {
+  public errorCallback: Function;
 
   private connected : boolean = false;
   private cluster: KafkaClusterInformation;
@@ -33,9 +34,9 @@ export class KafkaService {
       let securedPassword = await this.getSecurePassword();
       const value = await window.kafka.connect(this.cluster, securedPassword, (errorType: string) => {
         if (errorType == "CRASH"){
-          this.cleanAndReturnWithError("Unexpected crash");
+          this.cleanupAndCallback("Unexpected crash");
         } else if (errorType == "DISCONNECT" && this.connected && !this.isChangingTopics){
-          this.cleanAndReturnWithError("Unexpected disconnection");
+          this.cleanupAndCallback("Unexpected disconnection");
         }
       });
       if (!value){
@@ -69,7 +70,7 @@ export class KafkaService {
     } catch (e) {
       console.log("Unable to fetch topic list");
       console.error(e);
-      this.cleanAndReturnWithError("Unable to fetch topics");
+      this.cleanupAndCallback("Unable to fetch topics");
       return [];
     } 
   }
@@ -83,7 +84,7 @@ export class KafkaService {
     } catch (e) {
       console.log("Unable to subscribe to topic");
       console.error(e);
-      this.cleanAndReturnWithError("Unable to subscribe");
+      this.cleanupAndCallback("Unable to subscribe");
       return;
     }
   }
@@ -124,13 +125,12 @@ export class KafkaService {
     }
   }
 
-  cleanUpConnection(): void {
+  cleanUpConnection(callback: Function): void {
     console.warn("Closing up connection on request");
     this.connected = false;
     this.cluster = {} as KafkaClusterInformation;
     this.isConsumerPaused = false;
-    //TODO: Await for cleanup or put callback
-    window.kafka.cleanup();
+    window.kafka.cleanup(callback);
   }
 
   getMessageStringValue(message: KafkaMessage): string {
@@ -154,18 +154,8 @@ export class KafkaService {
     return json;
   }
 
-  cleanAndReturnWithError(error: string): void {
-    this.cleanUpConnection();
-    this.returnHomeWithError(error);
-  }
-
-  returnHomeWithError(error: string): void {
-    let action : NavigationAction = {
-      action: actionShowToast,
-      type: 'error',
-      value: error
-    } 
-    this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
+  cleanupAndCallback(error: string): void {
+    this.cleanUpConnection(this.errorCallback);
   }
 
   getSecurePassword(): Promise<string> {

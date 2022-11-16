@@ -19,7 +19,7 @@ export interface IKafkaAPI {
   create: (topicName: string) => Promise<boolean>,
   subscribe: (topic: string, messageCallback: Function) => Promise<void>,
   produce: (topic: string, key: string, value: string) => Promise<boolean>,
-  cleanup: () => void,
+  cleanup: (callback: Function) => void,
   pause: () => void,
   resume: () => void
 }

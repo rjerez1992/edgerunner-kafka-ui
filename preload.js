@@ -28,7 +28,7 @@ contextBridge.exposeInMainWorld('kafka', {
   create: (topicName) => createTopic(topicName),
   subscribe: (targetTopic, messageCallback) => subscribeToTopic(targetTopic, messageCallback),
   produce: (targetTopic, key, message) => publishToTopic(targetTopic, key, message),
-  cleanup: () => kafkaCleanup(),
+  cleanup: (callback) => kafkaCleanup(callback),
   pause: () => pauseConsumer(),
   resume: () => resumeConsumer(),
 })

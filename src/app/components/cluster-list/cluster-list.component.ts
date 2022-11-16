@@ -44,6 +44,9 @@ export class ClusterListComponent implements OnInit {
       this.resolveAction(navAction);
     }
     this.generalParamsService.setHeaderMode(headerClusterList);
+    this.kafkaService.errorCallback = () => {
+      SwalHelpers.triggerToast("error", "Cluster connectivity error");
+    };
   }
 
   ngAfterViewInit() {
