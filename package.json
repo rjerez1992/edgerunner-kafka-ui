@@ -1,6 +1,12 @@
 {
   "name": "edgerunner",
   "version": "1.5.0-b5",
+  "description": "Desktop Kafka UI Tool for Consuming and Producing messages.",
+  "author": {
+    "name" : "Reinaldo Jerez",
+    "email" : "rjerez1992@gmail.com",
+    "url" : "https://github.com/rjerez1992"
+  },
   "main": "main.js",
   "scripts": {
     "ng": "ng",
