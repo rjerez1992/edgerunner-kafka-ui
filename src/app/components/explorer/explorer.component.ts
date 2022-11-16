@@ -15,6 +15,7 @@ import { SwalHelpers } from 'src/app/utils/swal-helpers';
 import * as monaco from "monaco-editor";
 import { NgxEditorModel } from 'ngx-monaco-editor-v2';
 import { DataGenerator } from 'src/app/utils/data-generator';
+import { debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-explorer',
@@ -43,6 +44,11 @@ export class ExplorerComponent implements OnInit {
   @Input() currentEditTemplate: UserMessageTemplate;
 
   private newMessageIconShownRecord: string[] = [];
+
+  //Search bar
+  @Input() searchValue: string = "";
+  private topicFilterValue: string = "";
+  searchChange = new Subject<string>();
 
   //Monaco editor options - Template editor
   public templateEditorOptions = {
@@ -89,6 +95,9 @@ export class ExplorerComponent implements OnInit {
   ) { 
     this.receivedMessages = [];
     this.currentEditTemplate = {} as UserMessageTemplate;
+    this.searchChange.pipe(debounceTime(300)).subscribe(() => {
+      this.updateSearch();
+    });
   }
 
   ngOnInit(): void {
@@ -551,5 +560,37 @@ export class ExplorerComponent implements OnInit {
       }
     }
     return true;
+  }
+
+  searchChanged(event: any): void {
+    this.searchChange.next(this.searchValue);
+  }
+
+  getFilteredTopics(): string[] {
+    if (this.searchValue != ''){
+      return this.topics.filter(t => t.includes(this.searchValue));
+    }
+    return this.topics;
+  }
+
+  updateSearch(): void {
+    this.topicFilterValue = this.searchValue;
+  }
+
+  removeSearch(): void {
+    this.searchValue = '';
+    this.updateSearch();
+  }
+
+  duplicateTemplate(template: UserMessageTemplate) : void {
+    let jsonString = JSON.stringify(template);
+    let cloned = JSON.parse(jsonString) as UserMessageTemplate;
+
+    cloned.id = uuidv4();
+    cloned.name = cloned.name + " copy";
+    this.userTemplatesService.addUserTemplate(cloned);
+    
+    this.loadUserTemplates();
+    SwalHelpers.triggerToast("success", "Template duplicated");   
   }
 }

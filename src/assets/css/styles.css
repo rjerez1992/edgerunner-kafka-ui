@@ -133,3 +133,9 @@ textarea {
 .tab-dark {
   color: var(--bs-gray-300);
 }
+
+.button-end-field {
+  position: absolute;
+  right: 24px;
+  margin-top: 7px;
+}

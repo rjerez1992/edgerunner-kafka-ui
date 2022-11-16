@@ -8,9 +8,18 @@
                         <path d="M511.1 63.1v287.1c0 35.25-28.75 63.1-64 63.1h-144l-124.9 93.68c-7.875 5.75-19.12 .0497-19.12-9.7v-83.98h-96c-35.25 0-64-28.75-64-63.1V63.1c0-35.25 28.75-63.1 64-63.1h384C483.2 0 511.1 28.75 511.1 63.1z"></path>
                     </svg>&nbsp;Topics</h5>
                 <hr style="margin-right: 12px;margin-left: 12px;margin-top: 1px;"><!-- Start: topics -->
+                <div class="row" style="margin: 0px;padding: 0px;margin-bottom: 12px;">
+                    <div class="col" style="margin: 0px;padding: 0px;">
+                        <!-- Start: search-icon --><svg *ngIf="this.searchValue == ''" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-primary button-end-field">
+                            <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                            <path d="M500.3 443.7l-119.7-119.7c27.22-40.41 40.65-90.9 33.46-144.7C401.8 87.79 326.8 13.32 235.2 1.723C99.01-15.51-15.51 99.01 1.724 235.2c11.6 91.64 86.08 166.7 177.6 178.9c53.8 7.189 104.3-6.236 144.7-33.46l119.7 119.7c15.62 15.62 40.95 15.62 56.57 0C515.9 484.7 515.9 459.3 500.3 443.7zM79.1 208c0-70.58 57.42-128 128-128s128 57.42 128 128c0 70.58-57.42 128-128 128S79.1 278.6 79.1 208z"></path>
+                        </svg><!-- End: search-icon -->
+                        <input [(ngModel)]="this.searchValue" (ngModelChange)="this.searchChanged($event)" type="search" style="width: 100%;" placeholder="Search" autocomplete="off">
+                    </div>
+                </div>
                 <div class="flex-fill" style="overflow: auto;padding-right: 3px;padding-left: 3px;margin-bottom: 10px;">
                     <!-- Start: topic-button -->
-                    <div *ngFor="let topic of this.topics; index as i; first as isFirst">
+                    <div *ngFor="let topic of this.getFilteredTopics(); index as i; first as isFirst">
                         <div *ngIf="topic != this.activeTopic" (click)="this.setActiveTopic(topic)" class="card card-darker" style="margin-bottom: 3px;">
                             <div class="card-body pointer-cursor" style="padding: 7px;">
                                 <h6 class="text-truncate text-start text-white-50 card-title" style="margin-bottom: 0px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 512 512" width="1em" height="1em" fill="currentColor" class="text-muted" style="margin-bottom: 4px;">
@@ -73,6 +82,13 @@
                                 <path d="M0 64C0 28.65 28.65 0 64 0H224V128C224 145.7 238.3 160 256 160H384V299.6L289.3 394.3C281.1 402.5 275.3 412.8 272.5 424.1L257.4 484.2C255.1 493.6 255.7 503.2 258.8 512H64C28.65 512 0 483.3 0 448V64zM256 128V0L384 128H256zM564.1 250.1C579.8 265.7 579.8 291 564.1 306.7L534.7 336.1L463.8 265.1L493.2 235.7C508.8 220.1 534.1 220.1 549.8 235.7L564.1 250.1zM311.9 416.1L441.1 287.8L512.1 358.7L382.9 487.9C378.8 492 373.6 494.9 368 496.3L307.9 511.4C302.4 512.7 296.7 511.1 292.7 507.2C288.7 503.2 287.1 497.4 288.5 491.1L303.5 431.8C304.9 426.2 307.8 421.1 311.9 416.1V416.1z"></path>
                             </svg>&nbsp;Send</button>
                             <!-- End: send-button -->
+
+                            <!-- Start: duplicate-icon-->
+                            <svg (click)="this.duplicateTemplate(template)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-end text-white-50 pointer-cursor mini-button" data-bs-toggle="tooltip" data-bss-tooltip="" style="position: absolute;right: 24px;top: 5px;font-size: 15px;margin-right: 42px;margin-top: 12px;" title="Duplicate">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M384 96L384 0h-112c-26.51 0-48 21.49-48 48v288c0 26.51 21.49 48 48 48H464c26.51 0 48-21.49 48-48V128h-95.1C398.4 128 384 113.6 384 96zM416 0v96h96L416 0zM192 352V128h-144c-26.51 0-48 21.49-48 48v288c0 26.51 21.49 48 48 48h192c26.51 0 48-21.49 48-48L288 416h-32C220.7 416 192 387.3 192 352z"></path>
+                            </svg>
+                            <!-- End: duplicate-icon -->
 
                             <!-- Start: trash-icon -->
                             <svg (click)="this.deleteTemplate(template); $event.stopPropagation()" xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 512 512" width="1em" height="1em" fill="currentColor" class="text-danger delete-icon-corner" data-bs-toggle="tooltip" data-bss-tooltip="" title="Delete message">
