@@ -12,6 +12,7 @@ import { NavigationAction } from 'src/app/models/navigation-action';
 import { actionShowToast, headerAddCluster, headerEditCluster } from 'src/app/definitions/constants';
 import { Buffer } from 'buffer';
 import { GeneralParamsService } from 'src/app/services/general-params.service';
+import { KafkaService } from 'src/app/services/kafka.service';
 
 @Component({
   selector: 'app-add-cluster',
@@ -28,13 +29,17 @@ export class AddClusterComponent implements OnInit {
   public editMode: boolean = false;
   public headText: string = "Add";
 
+  public isLoading : boolean = false;
+  public loadingText: string = "";
+
   constructor(
     private router: Router, 
     private userClustersService: UserClustersService, 
     private storageService: StorageService,
     private route: ActivatedRoute,
     private cdRef: ChangeDetectorRef,
-    private generalParamsService: GeneralParamsService
+    private generalParamsService: GeneralParamsService,
+    private kafkaService: KafkaService
   ) { 
     this.clusterInformation = {} as KafkaClusterInformation;
     this.password = "";
@@ -63,7 +68,7 @@ export class AddClusterComponent implements OnInit {
 
   setEditMode(): void {
     this.editMode = true;
-    this.headText = "Edit";
+    this.headText = "Save";
   }
 
   async setClusterData(clusterId: string) : Promise<void> {
@@ -178,5 +183,29 @@ export class AddClusterComponent implements OnInit {
 
       this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
     }
+  }
+
+  async testConnection(): Promise<void> {
+    this.setLoading("Testing connectivity");
+    this.kafkaService.connectToCluster(this.clusterInformation).then((result) => {
+      if (result){
+        SwalHelpers.triggerToast("success", "Connection successful");
+      } else {
+        SwalHelpers.triggerToast("error", "Unable to connect");
+      }
+      this.kafkaService.cleanUpConnection(() => { console.log("Connections cleaned from testing"); });
+      this.isLoading = false;
+      this.cdRef.detectChanges();
+    }, (err) => {
+      SwalHelpers.triggerToast("error", "Error when connecting");
+      this.kafkaService.cleanUpConnection(() => { console.log("Connections cleaned from testing"); });
+      this.isLoading = false;
+      this.cdRef.detectChanges();
+    });
+  }
+
+  setLoading(message: string){
+    this.loadingText = message;
+    this.isLoading = true;
   }
 }

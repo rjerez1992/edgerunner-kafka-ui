@@ -34,7 +34,11 @@ export class ClusterListComponent implements OnInit {
     private generalParamsService: GeneralParamsService,
     private storageService: StorageService,
     private githubHelperService: GithubHelperService
-  ) {}
+  ) {
+    this.router.routeReuseStrategy.shouldReuseRoute = function() {
+      return false;
+    };
+  }
   
   ngOnInit(): void { 
     this.setLoading("Loading user settings");

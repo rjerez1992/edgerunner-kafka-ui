@@ -75,6 +75,15 @@
                 <!-- Start: buttons -->
                 <div class="row text-center" style="padding-left: 10px;padding-right: 10px;margin-bottom: 10px;margin-top: 20px;">
                     <div class="col">
+                        <!-- Start: try -->
+                        <button (click)="this.testConnection()" class="btn btn-success" type="button" style="width: 100%;"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" width="1em" height="1em" fill="currentColor" class="text-default" style="margin-bottom: 4px;">
+                                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M96 0C78.3 0 64 14.3 64 32v96h64V32c0-17.7-14.3-32-32-32zM288 0c-17.7 0-32 14.3-32 32v96h64V32c0-17.7-14.3-32-32-32zM32 160c-17.7 0-32 14.3-32 32s14.3 32 32 32v32c0 77.4 55 142 128 156.8V480c0 17.7 14.3 32 32 32s32-14.3 32-32V412.8C297 398 352 333.4 352 256V224c17.7 0 32-14.3 32-32s-14.3-32-32-32H32z"></path>
+                            </svg> Try
+                        </button>
+                        <!-- End: try -->
+                    </div>
+                    <div class="col">
                         <!-- Start: cancel --><button [routerLink]="''" class="btn btn-danger" type="button" style="width: 100%;">Cancel</button><!-- End: cancel -->
                     </div>
                     <div class="col">
@@ -85,3 +94,5 @@
         </div>
     </div><!-- End: add-form -->
 </div>
+<!-- Loading overlay -->
+<app-loading-overlay *ngIf="this.isLoading" [text]="this.loadingText"></app-loading-overlay>

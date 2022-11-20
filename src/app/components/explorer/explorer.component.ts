@@ -16,6 +16,7 @@ import * as monaco from "monaco-editor";
 import { NgxEditorModel } from 'ngx-monaco-editor-v2';
 import { DataGenerator } from 'src/app/utils/data-generator';
 import { debounceTime, Subject } from 'rxjs';
+import { SortType } from 'src/app/definitions/enums';
 
 @Component({
   selector: 'app-explorer',
@@ -44,6 +45,8 @@ export class ExplorerComponent implements OnInit {
   @Input() currentEditTemplate: UserMessageTemplate;
 
   private newMessageIconShownRecord: string[] = [];
+
+  public sortingType: SortType = SortType.DateASC;
 
   //Search bar
   @Input() searchValue: string = "";
@@ -601,5 +604,34 @@ export class ExplorerComponent implements OnInit {
     
     this.loadUserTemplates();
     SwalHelpers.triggerToast("success", "Template duplicated");   
+  }
+
+  getSortedTemplates(): UserMessageTemplate[] {
+    switch (this.sortingType) {
+      case SortType.NameAZ:
+        return this.templates.sort((a, b) => a.name.toLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
+      case SortType.NameZA:
+        return this.templates.sort((a, b) => a.name.toLowerCase() < b.name.toLocaleLowerCase() ? 1 : -1);
+      case SortType.DateASC:
+        return this.templates.sort((a, b) => a.dateAdded > b.dateAdded ? 1 : -1);
+      case SortType.DateDESC:
+        return this.templates.sort((a, b) => a.dateAdded < b.dateAdded ? 1 : -1);
+    }
+  }
+
+  changeSorting(): void {
+    if (this.getCurrentSortingValue() == 1) {
+      this.sortingType = SortType.DateDESC;
+    } else if (this.getCurrentSortingValue() == 2) {
+      this.sortingType = SortType.NameAZ;
+    } else if (this.getCurrentSortingValue() == 3) {
+      this.sortingType = SortType.NameZA;
+    } else if (this.getCurrentSortingValue() == 4) {
+      this.sortingType = SortType.DateASC;
+    }
+  }
+
+  getCurrentSortingValue() : number {
+    return this.sortingType;
   }
 }
