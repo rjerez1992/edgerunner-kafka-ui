@@ -6,9 +6,15 @@
 Edgerunner is a basic Apache Kafka UI tool for consuming and producing JSON data to Kafka clusters. Keep in mind
 this is not a cluster management tool and it was only made for its very specific purpose.
 
-## State    
+:warning: __This is in beta stage. Some bugs might happen. I recommend to wait for a stable release before using on production environment.__
 
-This is in **beta** stage. Most of the features have been already manually tested but there are some connectivity bugs that might happen from time to time. If you prefer, you can wait for a final release before using this on production environments. __(Check limitations and bugs for more information)__
+## How to run    
+
+Download the appropiate **.zip** file from the [releases page](https://github.com/rjerez1992/edgerunner-kafka-ui/releases), unzip and run.
+
+## How to use
+
+I hope it is simple enought but if you have any question then check this [quick youtube guide](https://www.youtube.com/watch?v=XPp1sDUerVw).
 
 ## Features
 
@@ -26,21 +32,39 @@ This is in **beta** stage. Most of the features have been already manually teste
 
 ## Upcoming
 
-- Test connection on add/edit cluster data.
 - Template versioning and groups.
+- Automated message production over time.
+- User data pools for generators.
+- Templates search and filters.
+- Export/import connections.
 
 ## Limitations and bugs
 
-- Credentials with cluster Admin access are required to fetch topic's list.
-- Cluster sessions might close when suspending the device.
-- Some connection errors might not be properly handled.
+- Credentials with cluster's topics access are required to fetch topics list.
+- Cluster sessions might close when suspending the device and/or losing connection.
+- Some connection errors might not be properly handled and cause UI to break.
 
-## Screenshots
+## Previews
 
-![cluster-list-ss](https://raw.githubusercontent.com/rjerez1992/edgerunner-kafka-ui/master/imgs/ss1.png?raw=true)
-![explorer-ss](https://github.com/rjerez1992/edgerunner-kafka-ui/blob/master/imgs/ss2.png?raw=true)
-![message-editor-ss](https://github.com/rjerez1992/edgerunner-kafka-ui/blob/master/imgs/ss3.png?raw=true)
-![add-cluster-ss](https://github.com/rjerez1992/edgerunner-kafka-ui/blob/master/imgs/ss4.png?raw=true)
+### Connections management
+
+![](https://github.com/rjerez1992/edgerunner-kafka-ui/blob/master/imgs/preview_connections.gif)
+
+### Topics management
+
+![](https://github.com/rjerez1992/edgerunner-kafka-ui/blob/master/imgs/preview_topics.gif)
+
+### Templates and production
+
+![](https://github.com/rjerez1992/edgerunner-kafka-ui/blob/master/imgs/preview_templates.gif)
+
+### Templates import/export
+
+![](https://github.com/rjerez1992/edgerunner-kafka-ui/blob/master/imgs/preview_import_export.gif)
+
+### Data generators
+
+![](https://github.com/rjerez1992/edgerunner-kafka-ui/blob/master/imgs/preview_generators.gif)
 
 ## Tech Stack
 
@@ -56,7 +80,7 @@ please open an issue and I'll see what I can do.
 ## Contributing
 
 Contributions are always welcome. Don't hesistate to open a PR.
-(Specially code refactoring because ngl it's a mess 😄)
+(Specially code refactoring because ngl it's not properly distributed on components)
 
 ## License
 
