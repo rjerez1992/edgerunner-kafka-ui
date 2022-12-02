@@ -32,15 +32,15 @@ export class FooterComponent implements OnInit {
 
     this.generalParamsService.getIsSecureMode().subscribe((value) => {
       this.secureModeFlag = value;
-      //this.cdRef.detectChanges();
+      this.cdRef.detectChanges();
     });
     this.generalParamsService.getIsReadOnly().subscribe((value) => {
       this.readOnlyFlag = value;
-      //this.cdRef.detectChanges();
+      this.cdRef.detectChanges();
     });
     this.generalParamsService.getSubscribedTopic().subscribe((value) => {
       this.subscribedTopic = value;
-      //this.cdRef.detectChanges();
+      this.cdRef.detectChanges();
     });
   }
 

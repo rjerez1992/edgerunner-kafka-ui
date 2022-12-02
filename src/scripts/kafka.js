@@ -180,8 +180,8 @@ connectConsumer = async (groupId, errorCallback) => {
     activeConsumer = activeCluster.consumer({ groupId: groupId });
 
     const { DISCONNECT, CRASH } = activeConsumer.events;
-    activeConsumer.on(DISCONNECT, e => errorCallback("DISCONNECT"));
-    activeConsumer.on(CRASH, e => errorCallback("CRASH"));
+    activeConsumer.on(DISCONNECT, e => errorCallback("DISCONNECT", e));
+    activeConsumer.on(CRASH, e => errorCallback("CRASH", e));
 
     errorCallbackActiveConsumer = errorCallback;
 
@@ -207,8 +207,8 @@ renewConsumer = async () => {
     console.log("KafkaJS: Connecting renewed consumer with groupId: "+ activeClusterInformation.groupId);
     activeConsumer = activeCluster.consumer({ groupId: activeClusterInformation.groupId });
 
-    activeConsumer.on(DISCONNECT, e => errorCallbackActiveConsumer("DISCONNECT"));
-    activeConsumer.on(CRASH, e => errorCallbackActiveConsumer("CRASH"));
+    activeConsumer.on(DISCONNECT, e => errorCallbackActiveConsumer("DISCONNECT", e));
+    activeConsumer.on(CRASH, e => errorCallbackActiveConsumer("CRASH", e));
 
     await activeConsumer.connect();
     return true;

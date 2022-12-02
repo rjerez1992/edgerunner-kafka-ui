@@ -15,9 +15,11 @@ export class KafkaService {
   public errorCallback: Function;
 
   private connected : boolean = false;
+  private isDisconnecting : boolean = false;
   private cluster: KafkaClusterInformation;
   private isConsumerPaused : boolean = false;
   private isChangingTopics : boolean = false;
+  private hasBroken : boolean = false;
   
   constructor(
     private router: Router,
@@ -29,16 +31,35 @@ export class KafkaService {
       console.error("Trying to connect to a cluster while another connection is open");
       return false;
     }
+    this.connected = false;
+    this.hasBroken = false;
+    this.isConsumerPaused = false;
+    this.isChangingTopics = false;
+    this.isDisconnecting = false;
     this.cluster = clusterInformation;
     try {
       let securedPassword = await this.getSecurePassword();
-      const value = await window.kafka.connect(this.cluster, securedPassword, (errorType: string) => {
+      const value = await window.kafka.connect(this.cluster, securedPassword, (errorType: string, error: any) => {
+        if (this.hasBroken){
+          return;
+        }
+        this.hasBroken = true;
+
+        let errorCallback = this.errorCallback;
+        this.errorCallback = () => { console.warn("Error callback removed") };
         if (errorType == "CRASH"){
-          this.cleanupAndCallback("Unexpected crash");
-        } else if (errorType == "DISCONNECT" && this.connected && !this.isChangingTopics){
-          this.cleanupAndCallback("Unexpected disconnection");
+          console.error("Connection to Kafka CRASHED");
+          this.cleanUpConnection(() => {errorCallback(error);});
+        } else if (errorType == "DISCONNECT" && this.connected && !this.isChangingTopics && !this.isDisconnecting){
+          console.error("Connection to Kafka DISCONNECTED");
+          this.cleanUpConnection(() => {errorCallback(error);});
+        } else if (errorType != "DISCONNECT" && this.connected && !this.isChangingTopics && !this.isDisconnecting)  {
+          console.error("Connection to Kafka FAILED with TYPE:");
+          console.error(errorType);
+          this.cleanUpConnection(() => {errorCallback(error);});
         }
       });
+      
       if (!value){
         console.error("Unable to connect to cluster. Returned false");
         this.connected = false;
@@ -62,15 +83,22 @@ export class KafkaService {
     return this.cluster;
   }
 
+  removeErrorCallback(): void {
+    this.errorCallback = (error: string) => { 
+      console.warn("### Error callback removed ###"); 
+      console.warn(error);
+    };
+  }
+
   async topicsList(): Promise<string[]> {
     try {
       let value = await window.kafka.topics();
       value = value.filter(x => x !== '__consumer_offsets'); 
       return value;
     } catch (e) {
-      console.log("Unable to fetch topic list");
+      console.error("Unable to fetch topic list");
       console.error(e);
-      this.cleanupAndCallback("Unable to fetch topics");
+      this.cleanupAndCallback();
       return [];
     } 
   }
@@ -82,9 +110,9 @@ export class KafkaService {
       this.isChangingTopics = false;
       return;
     } catch (e) {
-      console.log("Unable to subscribe to topic");
+      console.error("Unable to subscribe to topic");
       console.error(e);
-      this.cleanupAndCallback("Unable to subscribe");
+      this.cleanupAndCallback();
       return;
     }
   }
@@ -126,11 +154,22 @@ export class KafkaService {
   }
 
   cleanUpConnection(callback: Function): void {
-    console.warn("Closing up connection on request");
-    this.connected = false;
-    this.cluster = {} as KafkaClusterInformation;
-    this.isConsumerPaused = false;
-    window.kafka.cleanup(callback);
+    if (!this.isConnected){
+      console.warn("Kafka is not connected and cleanup attempted");
+      return;
+    }
+
+    console.info("Closing up connection on request");
+    this.isDisconnecting = true;
+
+    window.kafka.cleanup(() => {
+      console.info("Connection closed. Resetting variables");
+      this.isDisconnecting = false;
+      this.connected = false;
+      this.cluster = {} as KafkaClusterInformation;
+      this.isConsumerPaused = false;
+      callback();
+    });
   }
 
   getMessageStringValue(message: KafkaMessage): string {
@@ -154,7 +193,7 @@ export class KafkaService {
     return json;
   }
 
-  cleanupAndCallback(error: string): void {
+  cleanupAndCallback(): void {
     this.cleanUpConnection(this.errorCallback);
   }
 

@@ -35,9 +35,9 @@ export class ClusterListComponent implements OnInit {
     private storageService: StorageService,
     private githubHelperService: GithubHelperService
   ) {
-    this.router.routeReuseStrategy.shouldReuseRoute = function() {
+    /*this.router.routeReuseStrategy.shouldReuseRoute = function() {
       return false;
-    };
+    };*/
   }
   
   ngOnInit(): void { 

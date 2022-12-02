@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, NgZone, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import {v4 as uuidv4} from 'uuid';
 import { KafkaMessage } from 'kafkajs';
-import { actionShowToast, dataGeneratorDescriptionHTML, headerExploreCluster } from 'src/app/definitions/constants';
+import { actionShowToast, dataGeneratorDescriptionHTML, headerClusterList, headerExploreCluster } from 'src/app/definitions/constants';
 import { NavigationAction } from 'src/app/models/navigation-action';
 import { UserMessageTemplate } from 'src/app/models/user-templates';
 import { GeneralParamsService } from 'src/app/services/general-params.service';
@@ -48,10 +48,17 @@ export class ExplorerComponent implements OnInit {
 
   public sortingType: SortType = SortType.DateASC;
 
-  //Search bar
+  //Search bars
   @Input() searchValue: string = "";
   private topicFilterValue: string = "";
   searchChange = new Subject<string>();
+
+  @Input() searchTemplateValue: string = "";
+  private templateFilterValue: string = "";
+  searchTemplateChange = new Subject<string>();
+
+  public isConnectionBroken = false;
+  public connectionBrokenReason = "";
 
   //Monaco editor options - Template editor
   public templateEditorOptions = {
@@ -94,11 +101,15 @@ export class ExplorerComponent implements OnInit {
     private userTemplatesService: UserTemplatesService,
     private cdRef: ChangeDetectorRef,
     private generalParamsService: GeneralParamsService,
-    private router: Router
+    private router: Router,
+    private _ngZone: NgZone
   ) { 
     this.receivedMessages = [];
     this.currentEditTemplate = {} as UserMessageTemplate;
     this.searchChange.pipe(debounceTime(300)).subscribe(() => {
+      this.updateSearch();
+    });
+    this.searchTemplateChange.pipe(debounceTime(300)).subscribe(() => {
       this.updateSearch();
     });
   }
@@ -109,14 +120,23 @@ export class ExplorerComponent implements OnInit {
     this.generalParamsService.setClusterName(this.kafkaService.currentClusterInfo().name);
     this.generalParamsService.setIsSecureMode(this.kafkaService.currentClusterInfo().secureMode);
     this.generalParamsService.setIsReadOnly(this.kafkaService.currentClusterInfo().readOnly);
-    this.kafkaService.errorCallback = () => {
-      let action : NavigationAction = {
-        action: actionShowToast,
-        type: 'error',
-        value: 'Cluster error'
-      } 
-      this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
+
+    this.kafkaService.errorCallback = (error: any) => {
+      console.error("### Connection crashed. Running error callback ###");
+      this.isConnectionBroken = true;
+      this.generalParamsService.setHeaderMode(headerClusterList);
+      this.generalParamsService.setSubscribedTopic("");
+      this.generalParamsService.setIsSecureMode(false);
+      this.generalParamsService.setIsReadOnly(false);
+      if (error != undefined && error.payload != undefined){
+        this.connectionBrokenReason = JSON.stringify(error.payload);
+      } else {
+        this.connectionBrokenReason = "Unknown error";
+      }
+      console.log(error);
+      this.cdRef.detectChanges();
     };
+
   }
 
   ngAfterViewInit() {
@@ -578,15 +598,30 @@ export class ExplorerComponent implements OnInit {
     this.searchChange.next(this.searchValue);
   }
 
+  searchTemplateChanged(event: any): void {
+    this.searchTemplateChange.next(this.searchTemplateValue);
+  }
+
   getFilteredTopics(): string[] {
     if (this.searchValue != ''){
-      return this.topics.filter(t => t.includes(this.searchValue));
+      return this.topics.filter(t => t.toLowerCase().includes(this.searchValue.toLowerCase()));
     }
     return this.topics;
   }
 
+  getFilteredTemplates(): UserMessageTemplate[] {
+    if (this.searchTemplateValue != ''){
+      return this.templates.filter(t => t.name.toLowerCase().includes(this.searchTemplateValue.toLowerCase()));
+    }
+    return this.templates;
+  }
+
   updateSearch(): void {
     this.topicFilterValue = this.searchValue;
+  }
+
+  updateTemplateSearch(): void {
+    this.templateFilterValue = this.searchTemplateValue;
   }
 
   removeSearch(): void {
@@ -609,13 +644,13 @@ export class ExplorerComponent implements OnInit {
   getSortedTemplates(): UserMessageTemplate[] {
     switch (this.sortingType) {
       case SortType.NameAZ:
-        return this.templates.sort((a, b) => a.name.toLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1);
+        return this.getFilteredTemplates().sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
       case SortType.NameZA:
-        return this.templates.sort((a, b) => a.name.toLowerCase() < b.name.toLocaleLowerCase() ? 1 : -1);
+        return this.getFilteredTemplates().sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1);
       case SortType.DateASC:
-        return this.templates.sort((a, b) => a.dateAdded > b.dateAdded ? 1 : -1);
+        return this.getFilteredTemplates().sort((a, b) => a.dateAdded > b.dateAdded ? 1 : -1);
       case SortType.DateDESC:
-        return this.templates.sort((a, b) => a.dateAdded < b.dateAdded ? 1 : -1);
+        return this.getFilteredTemplates().sort((a, b) => a.dateAdded < b.dateAdded ? 1 : -1);
     }
   }
 
@@ -633,5 +668,20 @@ export class ExplorerComponent implements OnInit {
 
   getCurrentSortingValue() : number {
     return this.sortingType;
+  }
+
+  navigateToClusterList() : void {
+    console.info("Going back to list after connection broken");
+    if (!NgZone.isInAngularZone()){
+      this._ngZone.run(() =>{
+        let action : NavigationAction = {
+          action: actionShowToast,
+          type: 'error',
+          value: 'Session ended'
+        } 
+    
+        this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
+      });
+    }
   }
 }

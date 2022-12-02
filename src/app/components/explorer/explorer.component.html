@@ -1,4 +1,21 @@
-<div class="row gx-1 justify-content-center align-items-center h-100 overflow-hidden" style="padding-left: 10px;padding-right: 10px;padding-top: 10px;padding-bottom: 10px;">
+<!-- Broken connection layer -->
+<div *ngIf="this.isConnectionBroken" class="row justify-content-center align-items-center h-100 overflow-hidden" style="overflow: hidden;">
+    <div class="col-9 text-center align-self-center"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -32 576 576" width="1em" height="1em" fill="currentColor" class="text-danger" style="font-size: 54px;margin-bottom: 20px;">
+            <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+            <path d="M96 0C113.7 0 128 14.33 128 32V128H64V32C64 14.33 78.33 0 96 0zM288 0C305.7 0 320 14.33 320 32V128H256V32C256 14.33 270.3 0 288 0zM352 160C369.7 160 384 174.3 384 192C384 194.3 383.7 196.6 383.3 198.8C309.8 219.1 256 287.7 256 368C256 379.4 257.1 390.5 259.1 401.3C248.1 406.4 236.3 410.3 224 412.8V512H160V412.8C86.97 397.1 32 333.4 32 256V224C14.33 224 0 209.7 0 192C0 174.3 14.33 160 32 160H352zM288 368C288 288.5 352.5 224 432 224C511.5 224 576 288.5 576 368C576 447.5 511.5 512 432 512C352.5 512 288 447.5 288 368zM432 464C445.3 464 456 453.3 456 440C456 426.7 445.3 416 432 416C418.7 416 408 426.7 408 440C408 453.3 418.7 464 432 464zM415.1 288V368C415.1 376.8 423.2 384 431.1 384C440.8 384 447.1 376.8 447.1 368V288C447.1 279.2 440.8 272 431.1 272C423.2 272 415.1 279.2 415.1 288z"></path>
+        </svg>
+        <h5 class="text-truncate text-center">Connection broken</h5>
+        <h6 class="text-truncate text-center text-secondary">Please try again</h6>
+        <h6 class="text-truncate fs-6 text-center" style="margin-top: 20px;border-radius: 10px;border-style: dashed;border-color: rgba(255,193,7,0.19);color: rgb(200,154,12);margin-left: 250px;margin-right: 250px;">{{this.connectionBrokenReason}}</h6><!-- Start: save -->
+        <button (click)="this.navigateToClusterList()" class="btn btn-dark btn-sm" type="button" style="margin-top: 20px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 0 512 512" width="1em" height="1em" fill="currentColor" class="text-danger" style="margin-top: -3px;">
+                <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                <path d="M447.1 256C447.1 273.7 433.7 288 416 288H109.3l105.4 105.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L109.3 224H416C433.7 224 447.1 238.3 447.1 256z"></path>
+            </svg>&nbsp;Go back</button><!-- End: save -->
+    </div>
+</div>
+
+<!-- Explorer layer -->
+<div *ngIf="!this.isConnectionBroken" class="row gx-1 justify-content-center align-items-center h-100 overflow-hidden" style="padding-left: 10px;padding-right: 10px;padding-top: 10px;padding-bottom: 10px;">
     <!-- Start: topics-bar -->
     <div class="col-2 align-self-center h-100">
         <div class="card card-form h-100 flex-grow-0" style="width: 100%;">
@@ -80,6 +97,15 @@
                     </div>
                 </div>
                 <hr style="margin-right: 12px;margin-left: 12px;margin-top: 1px;">
+                <div class="row" style="margin: 0px;padding: 0px;margin-bottom: 12px;">
+                    <div class="col" style="margin: 0px;padding: 0px;">
+                        <!-- Start: search-icon --><svg *ngIf="this.searchTemplateValue == ''" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1em" height="1em" fill="currentColor" class="text-primary button-end-field">
+                            <!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+                            <path d="M500.3 443.7l-119.7-119.7c27.22-40.41 40.65-90.9 33.46-144.7C401.8 87.79 326.8 13.32 235.2 1.723C99.01-15.51-15.51 99.01 1.724 235.2c11.6 91.64 86.08 166.7 177.6 178.9c53.8 7.189 104.3-6.236 144.7-33.46l119.7 119.7c15.62 15.62 40.95 15.62 56.57 0C515.9 484.7 515.9 459.3 500.3 443.7zM79.1 208c0-70.58 57.42-128 128-128s128 57.42 128 128c0 70.58-57.42 128-128 128S79.1 278.6 79.1 208z"></path>
+                        </svg><!-- End: search-icon -->
+                        <input [(ngModel)]="this.searchTemplateValue" (ngModelChange)="this.searchTemplateChanged($event)" type="search" style="width: 100%;" placeholder="Search" autocomplete="off">
+                    </div>
+                </div>
                 
                 <!-- Start: collection -->
                 <div class="flex-fill" style="overflow: auto;padding-right: 3px;padding-left: 3px;margin-bottom: 10px;">
@@ -392,5 +418,6 @@
     </div>
     <!-- End: message-detail-bar -->
 </div>
+
 <!-- Loading overlay -->
-<app-loading-overlay *ngIf="this.isLoading" [text]="this.loadingText"></app-loading-overlay>
+<app-loading-overlay *ngIf="this.isLoading && !this.isConnectionBroken" [text]="this.loadingText"></app-loading-overlay>
