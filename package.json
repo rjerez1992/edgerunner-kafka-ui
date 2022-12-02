@@ -1,6 +1,6 @@
 {
   "name": "edgerunner",
-  "version": "1.6.0-b3",
+  "version": "1.7.1-b5",
   "description": "Desktop Kafka UI Tool for Consuming and Producing messages.",
   "author": {
     "name": "Reinaldo Jerez",
