@@ -564,6 +564,18 @@ export class ExplorerComponent implements OnInit {
     }
   }
 
+  beautifyIncomingMessage(): void {
+    if (this.isMessageViewerValidJSON()){
+      let object = JSON.parse(this.messageViewerCode);
+      let beautified = JSON.stringify(object, null, 2);
+      this.messageViewerCode = beautified;
+      this.cdRef.detectChanges();
+      SwalHelpers.triggerToast("success", "JSON beautified");
+    } else {
+      SwalHelpers.triggerToast("error", "Must be a valid JSON");
+    }
+  }
+
   compactCode(): void {
     if (this.isEditorValidJSON()){
       let object = JSON.parse(this.templateEditorCode);
@@ -586,6 +598,20 @@ export class ExplorerComponent implements OnInit {
     } catch (e) {
       try {
         JSON.parse(DataGenerator.processString(this.templateEditorCode));
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  isMessageViewerValidJSON(): boolean {
+    try {
+      JSON.parse(this.messageViewerCode);
+    } catch (e) {
+      try {
+        JSON.parse(this.templateEditorCode);
         return true;
       } catch (e) {
         return false;
@@ -682,6 +708,14 @@ export class ExplorerComponent implements OnInit {
     
         this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
       });
+    } else {
+      let action : NavigationAction = {
+        action: actionShowToast,
+        type: 'success',
+        value: 'Connection closed'
+      } 
+  
+      this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
     }
   }
 }

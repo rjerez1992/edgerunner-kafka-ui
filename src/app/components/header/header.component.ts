@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavigationAction } from 'src/app/models/navigation-action';
 import { GeneralParamsService } from 'src/app/services/general-params.service';
@@ -17,7 +17,8 @@ export class HeaderComponent implements OnInit {
     private generalParamsService: GeneralParamsService, 
     private cdRef: ChangeDetectorRef, 
     private kafkaService: KafkaService, 
-    private router: Router
+    private router: Router,
+    private _ngZone: NgZone,
   ) { }
 
   public headerMode: string = "";
@@ -56,13 +57,25 @@ export class HeaderComponent implements OnInit {
     SwalHelpers.showConfirmationWarning("Change cluster", "Are you sure you want to close the current connection?", "Change", ()=>{
       this.kafkaService.cleanUpConnection(() => {
         console.info("Connection closing on change cluster finalized");
-        let action : NavigationAction = {
-          action: actionShowToast,
-          type: 'success',
-          value: 'Connection closed'
-        } 
-    
-        this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
+        if(!NgZone.isInAngularZone()){
+          this._ngZone.run(() => {
+            let action : NavigationAction = {
+              action: actionShowToast,
+              type: 'success',
+              value: 'Connection closed'
+            } 
+        
+            this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
+          });
+        } else {
+          let action : NavigationAction = {
+            action: actionShowToast,
+            type: 'success',
+            value: 'Connection closed'
+          } 
+      
+          this.router.navigate(['/'], { queryParams : { navAction :  JSON.stringify(action) }} );
+        }
       });
     });
   }
