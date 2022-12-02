@@ -3,9 +3,9 @@
   "version": "1.6.0-b3",
   "description": "Desktop Kafka UI Tool for Consuming and Producing messages.",
   "author": {
-    "name" : "Reinaldo Jerez",
-    "email" : "rjerez1992@gmail.com",
-    "url" : "https://github.com/rjerez1992"
+    "name": "Reinaldo Jerez",
+    "email": "rjerez1992@gmail.com",
+    "url": "https://github.com/rjerez1992"
   },
   "main": "main.js",
   "scripts": {
@@ -34,6 +34,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
     "kafkajs": "^2.2.2",
+    "kafkajs-snappy": "^1.1.0",
     "monaco-editor": "^0.33.0",
     "ngx-monaco-editor-v2": "^14.0.2",
     "rxjs": "~7.5.0",
