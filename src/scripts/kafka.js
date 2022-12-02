@@ -1,4 +1,5 @@
-const { Kafka, logLevel } = require('kafkajs')
+const { Kafka, logLevel, CompressionTypes, CompressionCodecs } = require('kafkajs')
+const SnappyCodec = require('kafkajs-snappy')
 const { safeStorage } = require("electron");
 
 let activeCluster = undefined;
@@ -14,6 +15,9 @@ let errorCallbackActiveConsumer;
 
 let isConsumerPaused = false;
 let activeTopic = "";
+
+//NOTE: Setups snappy compression codec
+CompressionCodecs[CompressionTypes.Snappy] = SnappyCodec
 
 exports.connectCluster = async function (clusterInformation, securedPass, errorCallback) {
     if (activeCluster){
